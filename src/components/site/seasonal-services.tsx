@@ -141,8 +141,16 @@ const SEASONS: Record<
   },
 };
 
+function getCurrentSeason(): Season {
+  const month = new Date().getMonth(); // 0=Jan
+  if (month >= 2 && month <= 4) return "spring";
+  if (month >= 5 && month <= 7) return "summer";
+  if (month >= 8 && month <= 10) return "fall";
+  return "winter";
+}
+
 export function SeasonalServices() {
-  const [season, setSeason] = useState<Season>("spring");
+  const [season, setSeason] = useState<Season>(getCurrentSeason);
   const active = SEASONS[season];
 
   return (
@@ -192,7 +200,7 @@ export function SeasonalServices() {
           transition={{ duration: 0.28, ease: "easeOut" }}
           className="mt-10 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-8"
         >
-          <div className="relative overflow-hidden rounded-2xl">
+          <div className="relative aspect-3/4 overflow-hidden rounded-2xl lg:aspect-auto lg:min-h-105">
             <Image
               src={active.image}
               alt={`${active.label} lawn care services by Green Leaf`}
@@ -200,7 +208,7 @@ export function SeasonalServices() {
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 40vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/25 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-foreground/85 via-foreground/25 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 text-background">
               <div className="flex items-center gap-2 text-sm font-medium uppercase tracking-[0.15em] text-background/80">
                 <active.icon className="h-4 w-4" />

@@ -50,7 +50,7 @@ export default function Home() {
                     <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
                   </span>
                   <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground">
-                    Now booking spring cleanups
+                    Now booking summer service
                   </span>
                 </div>
 
@@ -119,7 +119,7 @@ export default function Home() {
               {/* Image */}
               <div className="lg:col-span-6">
                 <div className="relative">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-border/80 sm:aspect-[5/4] lg:aspect-[4/5]">
+                  <div className="relative aspect-4/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-border/80 sm:aspect-5/4 lg:aspect-4/5">
                     <Image
                       src="/images/hero.png"
                       alt="A manicured lawn in front of a suburban home, maintained by Green Leaf Lawn Care"
@@ -128,7 +128,7 @@ export default function Home() {
                       className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/25 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-foreground/25 via-transparent to-transparent" />
                   </div>
 
                   {/* Floating service chip */}
@@ -333,7 +333,7 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
               <div className="relative">
-                <div className="relative aspect-[7/4] overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
+                <div className="relative aspect-7/4 overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
                   <Image
                     src="/images/transformation.png"
                     alt="A lawn transformation. Patchy, thin turf on the left, thick and green on the right, six weeks into a Green Leaf care program."
@@ -483,7 +483,7 @@ export default function Home() {
                     className="mt-6 w-full rounded-full"
                   >
                     <a
-                      href="https://www.google.com/maps"
+                      href="https://g.page/r/greenleaflawncare-maplegrovemn"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -499,25 +499,43 @@ export default function Home() {
                     name: "Sarah M.",
                     area: "Maple Grove, MN",
                     time: "2 weeks ago",
+                    avatar: "https://i.pravatar.cc/72?img=47",
                     text: "Green Leaf took over our lawn last spring after we fired the big national company. The difference is obvious. Same crew every week, they actually edge, and the price didn't go up after the first month. Wish we'd switched sooner.",
                   },
                   {
                     name: "Mike R.",
                     area: "Plymouth, MN",
                     time: "1 month ago",
+                    avatar: "https://i.pravatar.cc/72?img=12",
                     text: "I got a quote in under a minute and they were out the same week. The fall aeration made a real difference this spring, way fewer bare spots.",
                   },
                   {
                     name: "Jennifer K.",
                     area: "Brooklyn Park, MN",
                     time: "1 month ago",
+                    avatar: "https://i.pravatar.cc/72?img=32",
                     text: "Honest crew. They told me I didn't need the full program, just aeration and a winterizer. Saved me money and the lawn looks better than ever.",
                   },
                   {
                     name: "David L.",
                     area: "Osseo, MN",
                     time: "2 months ago",
+                    avatar: "https://i.pravatar.cc/72?img=7",
                     text: "Called Monday for a spring cleanup. They came Wednesday. The yard hadn't been touched since fall and they had it looking good in an afternoon.",
+                  },
+                  {
+                    name: "Rachel T.",
+                    area: "Champlin, MN",
+                    time: "3 months ago",
+                    avatar: "https://i.pravatar.cc/72?img=44",
+                    text: "We have a corner lot with a lot of edging and it always looks razor sharp. Every other service we tried left the sidewalk a mess. These guys don't.",
+                  },
+                  {
+                    name: "Tom W.",
+                    area: "Dayton, MN",
+                    time: "3 months ago",
+                    avatar: "https://i.pravatar.cc/72?img=53",
+                    text: "Signed up for the snow removal contract in October and they showed up before I even woke up after the first big storm. Zero effort on my end. Worth every dollar.",
                   },
                 ].map((r) => (
                   <Card
@@ -527,9 +545,13 @@ export default function Home() {
                     <CardContent className="flex h-full flex-col p-5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
-                            {r.name.charAt(0)}
-                          </span>
+                          <Image
+                            src={r.avatar}
+                            alt={r.name}
+                            width={36}
+                            height={36}
+                            className="rounded-full object-cover ring-1 ring-border"
+                          />
                           <div>
                             <p className="text-sm font-semibold">{r.name}</p>
                             <p className="text-xs text-muted-foreground">
@@ -616,7 +638,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+              <div className="relative aspect-4/3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                 <Image
                   src="/images/gallery-1.png"
                   alt="A landscaped backyard in the northwest Twin Cities served by Green Leaf Lawn Care"
@@ -624,7 +646,7 @@ export default function Home() {
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 48vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-foreground/60 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-border bg-background/95 p-4 backdrop-blur-sm">
                   <div className="flex items-center gap-3">
                     <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
@@ -668,12 +690,24 @@ export default function Home() {
                 },
                 {
                   src: "/images/technician.png",
-                  alt: "A Green Leaf lawn care technician on a green lawn",
+                  alt: "A Green Leaf technician mowing a residential lawn",
+                },
+                {
+                  src: "/images/summer.png",
+                  alt: "A thick, healthy lawn during peak summer growth",
+                },
+                {
+                  src: "/images/fall.png",
+                  alt: "Fall leaf removal and cleanup on a residential property",
+                },
+                {
+                  src: "/images/spring.png",
+                  alt: "Fresh spring green-up after a Green Leaf fertilization program",
                 },
               ].map((g) => (
                 <div
                   key={g.src}
-                  className="group relative aspect-[4/3] overflow-hidden rounded-xl ring-1 ring-border"
+                  className="group relative aspect-4/3 overflow-hidden rounded-xl ring-1 ring-border"
                 >
                   <Image
                     src={g.src}
@@ -874,15 +908,50 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row">
+          <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <p>
               © {new Date().getFullYear()} Green Leaf Lawn Care, LLC. All
               rights reserved.
             </p>
-            <p className="flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-primary" />
-              Licensed and insured · MN Lic. #LC-2024-1482
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <p className="flex items-center gap-1.5">
+                <ShieldCheck className="h-4 w-4 text-primary" />
+                Licensed and insured · MN Lic. #LC-2024-1482
+              </p>
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/privacy"
+                  className="hover:text-primary underline-offset-2 hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/terms"
+                  className="hover:text-primary underline-offset-2 hover:underline"
+                >
+                  Terms of Service
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-col gap-1.5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              Designed by{" "}
+              <a
+                href="https://alectronicsolutions.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary underline-offset-2 hover:underline"
+              >
+                Alectronic Solutions
+              </a>
             </p>
+            <a
+              href="#top"
+              className="hover:text-primary underline-offset-2 hover:underline self-end sm:self-auto"
+            >
+              Back to top
+            </a>
           </div>
         </div>
       </footer>

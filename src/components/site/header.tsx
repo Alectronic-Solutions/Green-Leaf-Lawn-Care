@@ -8,7 +8,8 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Services", href: "#services" },
-  { label: "Why Green Leaf", href: "#why-us" },
+  { label: "Why Us", href: "#why-us" },
+  { label: "Get a Quote", href: "#quote" },
   { label: "Reviews", href: "#reviews" },
   { label: "Service Areas", href: "#areas" },
   { label: "FAQ", href: "#faq" },
@@ -94,7 +95,7 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-[60] lg:hidden">
+        <div className="fixed inset-0 z-60 lg:hidden">
           <div
             className="absolute inset-0 bg-foreground/30 backdrop-blur-sm"
             onClick={() => setOpen(false)}
