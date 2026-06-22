@@ -119,17 +119,19 @@ function ThankYouModal({
           </div>
 
           <h3 className="mt-5 text-2xl font-bold tracking-tight">
-            Your estimate is ready
+            Thanks for submitting!
           </h3>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-            Thanks, {name.split(" ")[0] || "neighbor"}. Your estimated price for{" "}
-            {estimate.serviceShort} is{" "}
+            This is a demo site built by{" "}
+            <span className="font-semibold text-foreground">Alectronic Solutions</span>
+            . In a live deployment, {name.split(" ")[0] || "you"} would receive a
+            callback within one business hour to confirm your{" "}
+            {estimate.serviceShort} estimate of{" "}
             <span className="font-semibold text-foreground">
               ${estimate.perVisit}
               {estimate.unit}
             </span>
-            . A crew lead will call within one business hour to confirm the
-            details and get you scheduled.
+            .
           </p>
 
           <div className="mt-5 rounded-xl bg-primary/8 border border-primary/15 p-4 text-left">
