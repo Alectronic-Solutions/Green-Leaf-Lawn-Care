@@ -31,6 +31,7 @@ jobs:
         run: bun run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_BASE_PATH: /Green-Leaf-Lawn-Care
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
