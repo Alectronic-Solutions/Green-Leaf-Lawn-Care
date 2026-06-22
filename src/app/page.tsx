@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { assetPath } from "@/lib/asset-path";
 import {
   Phone,
   Star,
@@ -121,7 +122,7 @@ export default function Home() {
                 <div className="relative">
                   <div className="relative aspect-4/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-border/80 sm:aspect-5/4 lg:aspect-4/5">
                     <Image
-                      src="/images/hero.png"
+                      src={assetPath("/images/hero.png")}
                       alt="A manicured lawn in front of a suburban home, maintained by Green Leaf Lawn Care"
                       fill
                       priority
@@ -335,7 +336,7 @@ export default function Home() {
               <div className="relative">
                 <div className="relative aspect-7/4 overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
                   <Image
-                    src="/images/transformation.png"
+                    src={assetPath("/images/transformation.png")}
                     alt="A lawn transformation. Patchy, thin turf on the left, thick and green on the right, six weeks into a Green Leaf care program."
                     fill
                     className="object-cover"
@@ -640,7 +641,7 @@ export default function Home() {
 
               <div className="relative aspect-4/3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                 <Image
-                  src="/images/gallery-1.png"
+                  src={assetPath("/images/gallery-1.png")}
                   alt="A landscaped backyard in the northwest Twin Cities served by Green Leaf Lawn Care"
                   fill
                   className="object-cover"
@@ -681,27 +682,27 @@ export default function Home() {
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
-                  src: "/images/gallery-1.png",
+                  src: assetPath("/images/gallery-1.png"),
                   alt: "A landscaped backyard with green grass and trimmed beds",
                 },
                 {
-                  src: "/images/gallery-2.png",
+                  src: assetPath("/images/gallery-2.png"),
                   alt: "A manicured front yard with crisp grass edging along the sidewalk",
                 },
                 {
-                  src: "/images/technician.png",
+                  src: assetPath("/images/technician.png"),
                   alt: "A Green Leaf technician mowing a residential lawn",
                 },
                 {
-                  src: "/images/summer.png",
+                  src: assetPath("/images/summer.png"),
                   alt: "A thick, healthy lawn during peak summer growth",
                 },
                 {
-                  src: "/images/fall.png",
+                  src: assetPath("/images/fall.png"),
                   alt: "Fall leaf removal and cleanup on a residential property",
                 },
                 {
-                  src: "/images/spring.png",
+                  src: assetPath("/images/spring.png"),
                   alt: "Fresh spring green-up after a Green Leaf fertilization program",
                 },
               ].map((g) => (
@@ -743,7 +744,7 @@ export default function Home() {
         <section className="relative overflow-hidden border-t border-border bg-foreground text-background">
           <div className="absolute inset-0 -z-10 opacity-25">
             <Image
-              src="/images/grass-texture.png"
+              src={assetPath("/images/grass-texture.png")}
               alt=""
               fill
               className="object-cover"

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sprout, Sun, Leaf, Snowflake, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { assetPath } from "@/lib/asset-path";
 
 type Season = "spring" | "summer" | "fall" | "winter";
 
@@ -23,7 +24,7 @@ const SEASONS: Record<
     label: "Spring",
     short: "Mar–May",
     icon: Sprout,
-    image: "/images/spring.png",
+    image: assetPath("/images/spring.png"),
     blurb:
       "Snow mold cleanup, first feed, and soil prep to bring the lawn out of winter dormancy.",
     services: [
@@ -53,7 +54,7 @@ const SEASONS: Record<
     label: "Summer",
     short: "Jun–Aug",
     icon: Sun,
-    image: "/images/summer.png",
+    image: assetPath("/images/summer.png"),
     blurb:
       "Weekly mowing at the correct height, plus heat-safe feeding and targeted weed control.",
     services: [
@@ -83,7 +84,7 @@ const SEASONS: Record<
     label: "Fall",
     short: "Sep–Nov",
     icon: Leaf,
-    image: "/images/fall.png",
+    image: assetPath("/images/fall.png"),
     blurb:
       "The season that decides next year's lawn. Aeration, seed, and winterizer applied at the right time.",
     services: [
@@ -113,7 +114,7 @@ const SEASONS: Record<
     label: "Winter",
     short: "Dec–Feb",
     icon: Snowflake,
-    image: "/images/winter.png",
+    image: assetPath("/images/winter.png"),
     blurb:
       "Snow removal for driveways and walkways, with salting on every visit.",
     services: [
