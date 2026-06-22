@@ -8,8 +8,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Services", href: "#services" },
-  { label: "Why Us", href: "#why-us" },
-  { label: "Get a Quote", href: "#quote" },
+  { label: "Why Green Leaf", href: "#why-us" },
   { label: "Reviews", href: "#reviews" },
   { label: "Service Areas", href: "#areas" },
   { label: "FAQ", href: "#faq" },
@@ -41,28 +40,26 @@ export function SiteHeader() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         scrolled
-          ? "bg-background/90 backdrop-blur-md border-b border-border shadow-sm"
+          ? "bg-background/90 backdrop-blur-md border-b border-border"
           : "bg-transparent"
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
         <Link href="#top" className="flex items-center gap-2.5 group">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm transition-transform group-hover:scale-105">
-            <Leaf className="h-5 w-5" />
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Leaf className="h-5 w-5" strokeWidth={2.25} />
           </span>
           <span className="flex flex-col leading-none">
-            <span className="text-base font-extrabold tracking-tight text-foreground">
+            <span className="text-[15px] font-bold tracking-tight text-foreground">
               Green Leaf
             </span>
-            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-primary">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
               Lawn Care
             </span>
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden items-center gap-8 lg:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -74,8 +71,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        {/* Desktop actions */}
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-5 lg:flex">
           <a
             href={PHONE_HREF}
             className="flex items-center gap-2 text-sm font-semibold text-foreground transition-colors hover:text-primary"
@@ -84,25 +80,23 @@ export function SiteHeader() {
             {PHONE}
           </a>
           <Button asChild size="sm" className="rounded-full">
-            <a href="#quote">Get Free Quote</a>
+            <a href="#quote">Get a quote</a>
           </Button>
         </div>
 
-        {/* Mobile toggle */}
         <button
           aria-label="Open menu"
           className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-foreground lg:hidden hover:bg-accent"
           onClick={() => setOpen(true)}
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Mobile menu overlay */}
       {open && (
         <div className="fixed inset-0 z-[60] lg:hidden">
           <div
-            className="absolute inset-0 bg-foreground/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-foreground/30 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
           <div className="absolute right-0 top-0 h-full w-[82%] max-w-sm bg-background shadow-2xl flex flex-col">
@@ -111,14 +105,14 @@ export function SiteHeader() {
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Leaf className="h-4 w-4" />
                 </span>
-                <span className="font-extrabold">Green Leaf</span>
+                <span className="font-bold">Green Leaf</span>
               </span>
               <button
                 aria-label="Close menu"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-accent"
                 onClick={() => setOpen(false)}
               >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5" />
               </button>
             </div>
             <nav className="flex flex-col gap-1 p-4">
@@ -142,7 +136,7 @@ export function SiteHeader() {
               </Button>
               <Button asChild variant="outline" className="w-full rounded-full">
                 <a href="#quote" onClick={() => setOpen(false)}>
-                  Get Free Quote
+                  Get a quote
                 </a>
               </Button>
             </div>

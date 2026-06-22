@@ -4,12 +4,11 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Loader2,
-  CheckCircle2,
+  Check,
   Phone,
-  MapPin,
   Calendar,
-  Sparkles,
   ShieldCheck,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 
 const PHONE = "(763) 555-0142";
@@ -37,61 +35,41 @@ type ServiceKey =
 
 const SERVICES: Record<
   ServiceKey,
-  { label: string; base: number; unit: string; desc: string }
+  { label: string; base: number; unit: string; short: string }
 > = {
-  mowing: {
-    label: "Lawn Mowing & Edging",
-    base: 45,
-    unit: "/ visit",
-    desc: "Professional mow, precision edging & cleanup",
-  },
+  mowing: { label: "Lawn Mowing & Edging", base: 45, unit: "/ visit", short: "lawn mowing" },
   fertilization: {
     label: "Fertilization & Weed Control",
     base: 65,
     unit: "/ treatment",
-    desc: "Seasonal feeding + targeted weed control",
+    short: "fertilization",
   },
   aeration: {
     label: "Aeration & Overseeding",
     base: 180,
     unit: " flat",
-    desc: "Core aeration to relieve compaction + seed",
+    short: "aeration and overseeding",
   },
-  "leaf-removal": {
-    label: "Fall Leaf Removal",
-    base: 90,
-    unit: "/ visit",
-    desc: "Full property leaf cleanup & hauling",
-  },
-  "spring-cleanup": {
-    label: "Spring Cleanup",
-    base: 120,
-    unit: " flat",
-    desc: "Debris removal, bed cleanup, first cut",
-  },
-  "snow-removal": {
-    label: "Snow Removal",
-    base: 60,
-    unit: "/ visit",
-    desc: "Driveway & walkway clearing, salting",
-  },
+  "leaf-removal": { label: "Fall Leaf Removal", base: 90, unit: "/ visit", short: "leaf removal" },
+  "spring-cleanup": { label: "Spring Cleanup", base: 120, unit: " flat", short: "spring cleanup" },
+  "snow-removal": { label: "Snow Removal", base: 60, unit: "/ visit", short: "snow removal" },
 };
 
 const LOT_SIZES: Record<string, { label: string; mult: number }> = {
-  small: { label: "Small — under ¼ acre", mult: 1.0 },
-  medium: { label: "Medium — ¼ to ½ acre", mult: 1.3 },
-  large: { label: "Large — ½ to 1 acre", mult: 1.7 },
-  xlarge: { label: "Extra Large — 1+ acres", mult: 2.2 },
+  small: { label: "Small, under ¼ acre", mult: 1.0 },
+  medium: { label: "Medium, ¼ to ½ acre", mult: 1.3 },
+  large: { label: "Large, ½ to 1 acre", mult: 1.7 },
+  xlarge: { label: "Extra large, 1+ acres", mult: 2.2 },
 };
 
 const FREQUENCIES: Record<
   string,
-  { label: string; discount: number; visitsPerMonth: number }
+  { label: string; discount: number; visitsPerMonth: number; suffix: string }
 > = {
-  weekly: { label: "Weekly", discount: 0.1, visitsPerMonth: 4 },
-  biweekly: { label: "Bi-weekly", discount: 0.05, visitsPerMonth: 2 },
-  monthly: { label: "Monthly", discount: 0, visitsPerMonth: 1 },
-  onetime: { label: "One-time", discount: 0, visitsPerMonth: 1 },
+  weekly: { label: "Weekly", discount: 0.1, visitsPerMonth: 4, suffix: "/ month" },
+  biweekly: { label: "Bi-weekly", discount: 0.05, visitsPerMonth: 2, suffix: "/ month" },
+  monthly: { label: "Monthly", discount: 0, visitsPerMonth: 1, suffix: "/ month" },
+  onetime: { label: "One-time", discount: 0, visitsPerMonth: 1, suffix: " one-time" },
 };
 
 export function QuoteForm() {
@@ -114,19 +92,17 @@ export function QuoteForm() {
     const service = SERVICES[form.service];
     const lot = LOT_SIZES[form.lotSize];
     const freq = FREQUENCIES[form.frequency];
-    const perVisit = Math.round(
-      service.base * lot.mult * (1 - freq.discount)
-    );
-    const monthly =
-      form.frequency === "onetime"
-        ? perVisit
-        : perVisit * freq.visitsPerMonth;
+    const perVisit = Math.round(service.base * lot.mult * (1 - freq.discount));
+    const total =
+      form.frequency === "onetime" ? perVisit : perVisit * freq.visitsPerMonth;
     return {
       perVisit,
-      monthly,
-      serviceName: service.label,
+      total,
+      serviceShort: service.short,
       unit: service.unit,
       frequency: freq.label,
+      suffix: freq.suffix,
+      isOneTime: form.frequency === "onetime",
     };
   }, [form.service, form.lotSize, form.frequency]);
 
@@ -137,8 +113,8 @@ export function QuoteForm() {
     e.preventDefault();
     if (!form.name || !form.phone || !form.address) {
       toast({
-        title: "Please fill in your name, phone, and address",
-        description: "We need these to prepare your quote.",
+        title: "A few fields are required",
+        description: "Please add your name, phone, and service address.",
         variant: "destructive",
       });
       return;
@@ -150,19 +126,19 @@ export function QuoteForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          estimatedPrice: estimate.monthly,
+          estimatedPrice: estimate.total,
         }),
       });
       if (!res.ok) throw new Error("Request failed");
       setSuccess(true);
       toast({
-        title: "Quote request received!",
-        description: "We'll call you within 1 business hour.",
+        title: "Estimate request received",
+        description: "A crew lead will call you within one business day.",
       });
     } catch {
       toast({
         title: "Something went wrong",
-        description: "Please call us directly at " + PHONE,
+        description: `Please call us directly at ${PHONE}.`,
         variant: "destructive",
       });
     } finally {
@@ -174,36 +150,45 @@ export function QuoteForm() {
     return (
       <div
         id="quote"
-        className="relative scroll-mt-20 overflow-hidden rounded-3xl border border-border bg-card p-8 sm:p-12 shadow-lg"
+        className="scroll-mt-20 overflow-hidden rounded-2xl border border-border bg-card p-8 sm:p-12 shadow-sm"
       >
         <div className="mx-auto flex max-w-md flex-col items-center text-center">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10"
+            transition={{ type: "spring", stiffness: 200, damping: 16 }}
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10"
           >
-            <CheckCircle2 className="h-12 w-12 text-primary" />
+            <Check className="h-8 w-8 text-primary" strokeWidth={2.5} />
           </motion.div>
-          <h3 className="mt-6 text-2xl font-extrabold tracking-tight">
-            Your quote is on the way!
+          <h3 className="mt-6 text-2xl font-bold tracking-tight">
+            Your estimate is ready
           </h3>
-          <p className="mt-3 text-muted-foreground">
-            Thanks, {form.name.split(" ")[0] || "neighbor"}! Based on what you
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+            Thanks, {form.name.split(" ")[0] || "neighbor"}. Based on what you
             told us, your estimated price is{" "}
-            <span className="font-bold text-foreground">
+            <span className="font-semibold text-foreground">
               ${estimate.perVisit}
               {estimate.unit}
             </span>{" "}
-            for {estimate.serviceName.toLowerCase()}. A Green Leaf specialist
-            will call you within <strong>1 business hour</strong> to confirm
-            details and schedule your first visit.
+            for {estimate.serviceShort}. A crew lead will call within one
+            business day to confirm the details and answer any questions.
           </p>
+          <div className="mt-6 w-full rounded-xl bg-accent/60 p-4 text-left">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              What happens next
+            </p>
+            <ol className="mt-2 space-y-1.5 text-sm text-foreground">
+              <li>1. We call to confirm details and schedule.</li>
+              <li>2. A crew lead stops by to verify the estimate on site.</li>
+              <li>3. Service begins on your scheduled day.</li>
+            </ol>
+          </div>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row w-full">
             <Button asChild size="lg" className="rounded-full flex-1">
               <a href="tel:+17635550142">
                 <Phone className="mr-2 h-4 w-4" />
-                Call now: {PHONE}
+                Call {PHONE}
               </a>
             </Button>
             <Button
@@ -224,7 +209,8 @@ export function QuoteForm() {
                 });
               }}
             >
-              New quote
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Start over
             </Button>
           </div>
         </div>
@@ -235,30 +221,26 @@ export function QuoteForm() {
   return (
     <div
       id="quote"
-      className="scroll-mt-20 grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:gap-8"
+      className="scroll-mt-20 grid gap-6 lg:grid-cols-[1.35fr_1fr] lg:gap-8"
     >
-      {/* Form */}
       <form
         onSubmit={handleSubmit}
-        className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-lg"
+        className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm"
       >
-        <div className="mb-6 flex items-center gap-2">
-          <Badge className="rounded-full gap-1">
-            <Sparkles className="h-3 w-3" /> Instant Estimate
-          </Badge>
-        </div>
-        <h3 className="text-2xl font-extrabold tracking-tight">
-          Get your free instant quote
+        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+          Instant estimate
+        </p>
+        <h3 className="mt-2 text-2xl font-bold tracking-tight">
+          Get your estimate
         </h3>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Tell us about your lawn. See your estimated price instantly — no
-          waiting, no obligation.
+          Tell us about your property. Your estimated price updates as you go.
         </p>
 
         <div className="mt-6 space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="q-name">Full name *</Label>
+              <Label htmlFor="q-name">Full name</Label>
               <Input
                 id="q-name"
                 placeholder="Jordan Smith"
@@ -268,7 +250,7 @@ export function QuoteForm() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="q-phone">Phone *</Label>
+              <Label htmlFor="q-phone">Phone</Label>
               <Input
                 id="q-phone"
                 type="tel"
@@ -292,7 +274,7 @@ export function QuoteForm() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="q-address">Service address *</Label>
+              <Label htmlFor="q-address">Service address</Label>
               <Input
                 id="q-address"
                 placeholder="123 Maple St, Maple Grove"
@@ -304,7 +286,7 @@ export function QuoteForm() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>Which service do you need?</Label>
+            <Label>Service</Label>
             <Select
               value={form.service}
               onValueChange={(v) => update("service", v)}
@@ -315,7 +297,7 @@ export function QuoteForm() {
               <SelectContent>
                 {Object.entries(SERVICES).map(([key, s]) => (
                   <SelectItem key={key} value={key}>
-                    {s.label} — from ${s.base}
+                    {s.label} · from ${s.base}
                     {s.unit}
                   </SelectItem>
                 ))}
@@ -343,7 +325,7 @@ export function QuoteForm() {
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>Service frequency</Label>
+              <Label>Frequency</Label>
               <Select
                 value={form.frequency}
                 onValueChange={(v) => update("frequency", v)}
@@ -356,7 +338,7 @@ export function QuoteForm() {
                     <SelectItem key={key} value={key}>
                       {f.label}
                       {f.discount > 0
-                        ? ` — ${Math.round(f.discount * 100)}% off`
+                        ? ` · ${Math.round(f.discount * 100)}% off`
                         : ""}
                     </SelectItem>
                   ))}
@@ -366,11 +348,11 @@ export function QuoteForm() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="q-msg">Anything else we should know? (optional)</Label>
+            <Label htmlFor="q-msg">Notes (optional)</Label>
             <Textarea
               id="q-msg"
               rows={3}
-              placeholder="Gate codes, problem weeds, pet concerns, best time to call…"
+              placeholder="Gate codes, problem weeds, pets, best time to call."
               value={form.message}
               onChange={(e) => update("message", e.target.value)}
             />
@@ -381,98 +363,90 @@ export function QuoteForm() {
           type="submit"
           size="lg"
           disabled={submitting}
-          className="mt-6 w-full rounded-full text-base"
+          className="mt-6 w-full rounded-full"
         >
           {submitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Preparing your quote…
+              Preparing your estimate
             </>
           ) : (
-            <>Get My Instant Quote</>
+            <>See my estimate</>
           )}
         </Button>
         <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
           <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-          No spam. We call once, within 1 business hour.
+          We call once, within one business day. No spam, no obligation.
         </p>
       </form>
 
-      {/* Live estimate */}
       <div className="lg:sticky lg:top-24 lg:self-start">
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${estimate.perVisit}-${estimate.monthly}`}
-            initial={{ opacity: 0, y: 8 }}
+            key={`${estimate.perVisit}-${estimate.total}`}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary/80 p-6 sm:p-8 text-primary-foreground shadow-xl"
+            transition={{ duration: 0.2 }}
+            className="rounded-2xl border border-border bg-foreground p-6 sm:p-8 text-background shadow-sm"
           >
-            <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
-            <div className="relative">
-              <span className="text-sm font-medium uppercase tracking-wider opacity-90">
-                Your estimated price
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-background/60">
+              Your estimated price
+            </p>
+            <div className="mt-3 flex items-baseline gap-1.5">
+              <span className="text-5xl font-bold tracking-tight tabular-nums">
+                ${estimate.perVisit}
               </span>
-              <div className="mt-3 flex items-end gap-1">
-                <span className="text-5xl font-extrabold tracking-tight">
-                  ${estimate.perVisit}
-                </span>
-                <span className="mb-1.5 text-sm opacity-90">
-                  {estimate.unit}
-                </span>
-              </div>
-              <p className="mt-1 text-sm opacity-90">{estimate.serviceName}</p>
-
-              <div className="mt-6 space-y-3 rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-2 opacity-90">
-                    <Calendar className="h-4 w-4" />
-                    {estimate.frequency}
-                  </span>
-                  <span className="font-semibold">
-                    {form.frequency === "onetime"
-                      ? "One-time service"
-                      : `~$${estimate.monthly}/month`}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-2 opacity-90">
-                    <MapPin className="h-4 w-4" />
-                    {LOT_SIZES[form.lotSize].label.split("—")[0].trim()}
-                  </span>
-                  <span className="font-semibold">Included</span>
-                </div>
-              </div>
-
-              <div className="mt-6 space-y-2 border-t border-white/20 pt-5 text-sm">
-                <p className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 shrink-0" />
-                  Free, no-obligation estimate
-                </p>
-                <p className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 shrink-0" />
-                  100% satisfaction guarantee
-                </p>
-                <p className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 shrink-0" />
-                  Licensed &amp; insured crew
-                </p>
-              </div>
-
-              <p className="mt-5 text-xs opacity-80">
-                * Estimates are based on typical jobs in your area. Final
-                pricing confirmed on site. New customers get a first-visit
-                discount.
-              </p>
+              <span className="text-sm text-background/70">
+                {estimate.unit}
+              </span>
             </div>
+            <p className="mt-1 text-sm text-background/70 capitalize">
+              {estimate.serviceShort}
+            </p>
+
+            <dl className="mt-6 space-y-3 border-t border-background/15 pt-5 text-sm">
+              <div className="flex items-center justify-between">
+                <dt className="flex items-center gap-2 text-background/70">
+                  <Calendar className="h-4 w-4" />
+                  {estimate.frequency}
+                </dt>
+                <dd className="font-semibold tabular-nums">
+                  {estimate.isOneTime
+                    ? "One-time"
+                    : `~$${estimate.total}${estimate.suffix}`}
+                </dd>
+              </div>
+              <div className="flex items-center justify-between">
+                <dt className="text-background/70">On-site confirmation</dt>
+                <dd className="font-semibold">Included</dd>
+              </div>
+            </dl>
+
+            <ul className="mt-6 space-y-2 border-t border-background/15 pt-5 text-sm">
+              {[
+                "Free, no-obligation estimate",
+                "Same crew, same day each week",
+                "Licensed and insured in Minnesota",
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-2.5">
+                  <Check className="h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
+                  <span className="text-background/90">{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-6 border-t border-background/15 pt-4 text-xs leading-relaxed text-background/55">
+              Estimates reflect typical jobs in your area. Final pricing is
+              confirmed on site. New customers receive a first-visit discount.
+            </p>
           </motion.div>
         </AnimatePresence>
 
-        <div className="mt-4 flex items-center justify-center gap-2 rounded-2xl border border-border bg-card p-4 text-sm">
+        <div className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-border bg-card p-4 text-sm">
           <span className="text-muted-foreground">Prefer to talk?</span>
           <a
             href="tel:+17635550142"
-            className="flex items-center gap-1.5 font-bold text-primary hover:underline"
+            className="flex items-center gap-1.5 font-semibold text-primary hover:underline"
           >
             <Phone className="h-4 w-4" />
             {PHONE}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -13,20 +13,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  style: ["normal"],
+  display: "swap",
+});
+
 const businessName = "Green Leaf Lawn Care";
 const description =
-  "Green Leaf Lawn Care — trusted residential lawn care in Maple Grove, MN. Seasonal services, instant online quotes, and a lush, healthy lawn guaranteed. Free estimates. Call (763) 555-0142.";
+  "Residential lawn care for the northwest Twin Cities. Weekly mowing, fertilization, aeration, and seasonal cleanup. Upfront pricing, same crew every visit. Based in Maple Grove, MN.";
 const keywords = [
   "lawn care Maple Grove MN",
   "lawn care service",
   "lawn mowing",
-  "aeration overseeding",
+  "aeration and overseeding",
   "leaf removal",
-  "fertilization",
+  "lawn fertilization",
   "residential lawn care",
   "lawn care near me",
   "Green Leaf Lawn Care",
-  "instant lawn care quote",
+  "lawn care estimate",
 ];
 
 export const metadata: Metadata = {
@@ -56,7 +64,7 @@ export const metadata: Metadata = {
         url: "/images/hero.png",
         width: 1344,
         height: 768,
-        alt: "Lush manicured lawn cared for by Green Leaf Lawn Care",
+        alt: "A manicured lawn in front of a suburban home, maintained by Green Leaf Lawn Care",
       },
     ],
   },
@@ -171,7 +179,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased bg-background text-foreground`}
       >
         {children}
         <Toaster />

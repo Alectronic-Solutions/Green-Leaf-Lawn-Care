@@ -7,22 +7,16 @@ import {
   Leaf,
   Sprout,
   Clock,
-  Truck,
-  BadgeCheck,
-  HeartHandshake,
   MapPin,
   Mail,
-  Facebook,
-  Instagram,
-  ArrowRight,
+  ArrowUpRight,
   Quote,
-  Sparkles,
-  TrendingUp,
   Users,
   CalendarCheck,
+  Check,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SiteHeader } from "@/components/site/header";
 import { SeasonalServices } from "@/components/site/seasonal-services";
@@ -39,151 +33,144 @@ export default function Home() {
 
       <main className="flex-1">
         {/* ===== HERO ===== */}
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 -z-10 bg-grid" />
-          <div className="absolute -top-40 right-0 -z-10 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute top-20 -left-20 -z-10 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-
-          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:pb-24 lg:pt-20 lg:px-8">
-            {/* Copy */}
-            <div className="flex flex-col items-start">
-              <Badge className="mb-5 gap-1.5 rounded-full bg-primary/10 text-primary border-primary/20 hover:bg-primary/10">
-                <Sparkles className="h-3.5 w-3.5" />
-                Now booking spring cleanups — first 50 customers get 15% off
-              </Badge>
-              <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight text-balance sm:text-5xl lg:text-6xl">
-                A lusher, greener lawn —{" "}
-                <span className="text-primary">without lifting a finger.</span>
-              </h1>
-              <p className="mt-5 max-w-xl text-lg text-muted-foreground text-balance">
-                Maple Grove&apos;s trusted residential lawn care pros. Seasonal
-                services, fair upfront pricing, and a healthy, weed-free lawn
-                guaranteed — all season long.
-              </p>
-
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg" className="rounded-full text-base">
-                  <a href="#quote">
-                    Get My Free Quote
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full text-base"
-                >
-                  <a href={PHONE_HREF}>
-                    <Phone className="mr-2 h-4 w-4" />
-                    Call {PHONE}
-                  </a>
-                </Button>
-              </div>
-
-              {/* Trust signals */}
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
-                <div className="flex items-center gap-1.5">
-                  <div className="flex">
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <Star
-                        key={i}
-                        className="h-4 w-4 fill-amber-400 text-amber-400"
-                      />
-                    ))}
-                  </div>
-                  <span className="font-semibold">4.9</span>
-                  <span className="text-muted-foreground">
-                    · 187 Google reviews
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 text-muted-foreground">
-                  <ShieldCheck className="h-4 w-4 text-primary" />
-                  Licensed &amp; Insured
-                </div>
-                <div className="flex items-center gap-1.5 text-muted-foreground">
-                  <HeartHandshake className="h-4 w-4 text-primary" />
-                  100% Satisfaction Guarantee
-                </div>
-              </div>
-            </div>
-
-            {/* Hero image */}
-            <div className="relative">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl ring-1 ring-border">
-                <Image
-                  src="/images/hero.png"
-                  alt="Beautifully manicured green lawn cared for by Green Leaf Lawn Care in front of a suburban home"
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent" />
-              </div>
-
-              {/* Floating stat card */}
-              <div className="absolute -bottom-5 -left-3 sm:-left-5 rounded-2xl border border-border bg-card/95 p-4 shadow-xl backdrop-blur-sm animate-float-slow">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <CalendarCheck className="h-6 w-6" />
-                  </span>
-                  <div>
-                    <p className="text-2xl font-extrabold leading-none">
-                      2,400+
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      lawns serviced in 2024
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating rating card */}
-              <div className="absolute -top-4 -right-2 sm:-right-4 rounded-2xl border border-border bg-card/95 p-3.5 shadow-xl backdrop-blur-sm">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[10px] font-bold text-[#4285F4] shadow-sm">
-                    G
-                  </span>
-                  <div>
-                    <div className="flex items-center gap-0.5">
-                      {[0, 1, 2, 3, 4].map((i) => (
-                        <Star
-                          key={i}
-                          className="h-3 w-3 fill-amber-400 text-amber-400"
-                        />
-                      ))}
-                      <span className="ml-1 text-xs font-bold">4.9</span>
-                    </div>
-                    <p className="text-[10px] text-muted-foreground">
-                      on Google Business
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <section className="relative overflow-hidden border-b border-border">
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute inset-0 bg-grid opacity-70" />
+            <div className="absolute -top-32 -right-20 h-[32rem] w-[32rem] rounded-full bg-primary/10 blur-3xl" />
+            <div className="absolute top-1/2 -left-24 h-72 w-72 rounded-full bg-accent/40 blur-3xl" />
           </div>
 
-          {/* Trust bar marquee */}
-          <div className="border-y border-border bg-card/50 py-4">
-            <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-4 text-sm font-medium text-muted-foreground sm:px-6 lg:px-8">
-              <span className="flex items-center gap-2">
-                <Leaf className="h-4 w-4 text-primary" /> Family-owned since 2014
-              </span>
-              <span className="hidden h-4 w-px bg-border sm:block" />
-              <span className="flex items-center gap-2">
-                <Truck className="h-4 w-4 text-primary" /> Free on-site estimates
-              </span>
-              <span className="hidden h-4 w-px bg-border sm:block" />
-              <span className="flex items-center gap-2">
-                <BadgeCheck className="h-4 w-4 text-primary" /> MN licensed &amp;
-                insured
-              </span>
-              <span className="hidden h-4 w-px bg-border sm:block" />
-              <span className="flex items-center gap-2">
-                <Sprout className="h-4 w-4 text-primary" /> Kid &amp; pet-safe
-                treatments
-              </span>
+          <div className="mx-auto max-w-7xl px-4 pb-16 pt-12 sm:px-6 lg:pb-24 lg:pt-16 lg:px-8">
+            <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+              {/* Copy */}
+              <div className="flex flex-col items-start lg:col-span-6">
+                <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 backdrop-blur-sm">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                  </span>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground">
+                    Now booking spring cleanups
+                  </span>
+                </div>
+
+                <h1 className="font-display mt-6 text-[2.75rem] font-semibold leading-[1.04] tracking-[-0.02em] text-balance sm:text-[3.5rem] lg:text-[4rem]">
+                  Residential lawn care,{" "}
+                  <span className="text-primary">done right</span> the first
+                  time.
+                </h1>
+                <p className="mt-5 max-w-md text-[17px] leading-[1.6] text-muted-foreground text-balance">
+                  Weekly mowing, fertilization, aeration, and seasonal cleanup
+                  for homes across the northwest Twin Cities. Upfront pricing,
+                  the same crew every visit, and a lawn you don't have to
+                  think about.
+                </p>
+
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Button asChild size="lg" className="rounded-full text-[15px] shadow-md shadow-primary/20">
+                    <a href="#quote">
+                      Get a quote
+                      <ArrowUpRight className="ml-1.5 h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="rounded-full text-[15px] bg-card/60 backdrop-blur-sm"
+                  >
+                    <a href={PHONE_HREF}>
+                      <Phone className="mr-2 h-4 w-4" />
+                      {PHONE}
+                    </a>
+                  </Button>
+                </div>
+
+                {/* Inline rating */}
+                <div className="mt-9 flex items-center gap-4">
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[0, 1, 2, 3, 4].map((i) => (
+                          <Star
+                            key={i}
+                            className="h-4 w-4 fill-amber-400 text-amber-400"
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm font-bold tabular-nums">4.9</span>
+                    </div>
+                    <p className="mt-0.5 text-[12px] text-muted-foreground">
+                      187 Google reviews
+                    </p>
+                  </div>
+                  <div className="h-9 w-px bg-border" />
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold tabular-nums">
+                      1,800+
+                    </span>
+                    <p className="mt-0.5 text-[12px] text-muted-foreground">
+                      lawns maintained in 2024
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="lg:col-span-6">
+                <div className="relative">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-border/80 sm:aspect-[5/4] lg:aspect-[4/5]">
+                    <Image
+                      src="/images/hero.png"
+                      alt="A manicured lawn in front of a suburban home, maintained by Green Leaf Lawn Care"
+                      fill
+                      priority
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/25 via-transparent to-transparent" />
+                  </div>
+
+                  {/* Floating service chip */}
+                  <div className="absolute -bottom-5 -left-3 hidden rounded-xl border border-border bg-card p-3.5 shadow-lg sm:block">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <CalendarCheck className="h-5 w-5" strokeWidth={2} />
+                      </span>
+                      <div className="leading-tight">
+                        <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                          This week
+                        </p>
+                        <p className="text-sm font-bold">
+                          42 lawns scheduled
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Trust bar */}
+            <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-border pt-7 sm:grid-cols-4">
+              {[
+                { icon: ShieldCheck, label: "Licensed and insured", sub: "MN Lic. #LC-2024-1482" },
+                { icon: Clock, label: "Same crew, same day", sub: "Every week, all season" },
+                { icon: Sprout, label: "Pet and family safe", sub: "Re-entry intervals that work" },
+                { icon: MapPin, label: "Free on-site estimates", sub: "We come to you, no charge" },
+              ].map((t) => (
+                <div key={t.label} className="flex items-start gap-2.5">
+                  <t.icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2} />
+                  <div>
+                    <p className="text-[13px] font-semibold leading-tight">
+                      {t.label}
+                    </p>
+                    <p className="mt-0.5 text-[11px] leading-tight text-muted-foreground">
+                      {t.sub}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -192,107 +179,100 @@ export default function Home() {
         <section id="services" className="scroll-mt-20 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <Badge className="mb-3 rounded-full gap-1">
-                <CalendarCheck className="h-3 w-3" /> Seasonal Services Menu
-              </Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                The right care, in every season
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                Seasonal services
+              </p>
+              <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                What your lawn needs, when it needs it
               </h2>
-              <p className="mt-4 text-lg text-muted-foreground text-balance">
-                Your lawn&apos;s needs change through the year. Our seasonal
-                service menu keeps your yard looking its best 365 days a year —
-                pick what you need, when you need it.
+              <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-balance">
+                Minnesota turf changes through the year. Our service calendar
+                follows it, so your lawn gets the right care at the right time.
               </p>
             </div>
-            <div className="mt-10">
+            <div className="mt-12">
               <SeasonalServices />
             </div>
           </div>
         </section>
 
-        {/* ===== WHY CHOOSE US ===== */}
+        {/* ===== WHY GREEN LEAF ===== */}
         <section
           id="why-us"
           className="scroll-mt-20 border-y border-border bg-card/40 py-16 lg:py-24"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <Badge className="mb-3 rounded-full gap-1">
-                <HeartHandshake className="h-3 w-3" /> Why Green Leaf
-              </Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                The local lawn care company your neighbors trust
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                Why Green Leaf
+              </p>
+              <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                A local company that actually shows up
               </h2>
-              <p className="mt-4 text-lg text-muted-foreground text-balance">
-                We&apos;re not a faceless national chain. We live here, we mow
-                here, and we treat every lawn like it&apos;s our own.
+              <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-balance">
+                We are not a national chain or a side hustle. We live here, we
+                mow here, and we have been doing it for over ten years.
               </p>
             </div>
 
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
                   icon: ShieldCheck,
-                  title: "Licensed & Insured",
-                  desc: "Fully licensed in Minnesota and carrying comprehensive liability insurance for your peace of mind.",
+                  title: "Licensed and insured",
+                  desc: "Fully licensed in Minnesota and insured. Certificate of insurance available on request.",
                 },
                 {
-                  icon: HeartHandshake,
-                  title: "Satisfaction Guaranteed",
-                  desc: "Not happy with a visit? We'll come back within 48 hours and make it right — free. No questions asked.",
+                  icon: Check,
+                  title: "Re-do guarantee",
+                  desc: "If a visit is not right, the crew comes back within 48 hours and fixes it. No charge, no pushback.",
                 },
                 {
                   icon: Sprout,
-                  title: "Kid & Pet Safe",
-                  desc: "Our fertilization and weed-control products are family- and pet-friendly, applied by certified technicians.",
+                  title: "Pet and family safe",
+                  desc: "Fertilizer and weed-control products with re-entry intervals that work around your schedule.",
                 },
                 {
                   icon: MapPin,
-                  title: "Genuinely Local",
-                  desc: "Based right here in Maple Grove. We know Minnesota grass, our winters, and exactly what your lawn needs.",
+                  title: "Local crews",
+                  desc: "Based in Maple Grove. Our crews know the soil, the grass varieties, and the weather here.",
                 },
                 {
-                  icon: Clock,
-                  title: "Reliable & On-Time",
-                  desc: "Same crew, same day, every week. You'll get a text when we're on the way and when the job's done.",
+                  icon: Users,
+                  title: "Same crew, same day",
+                  desc: "You get the same two-person crew on the same day each week. They learn your property.",
                 },
                 {
                   icon: TrendingUp,
-                  title: "Upfront, Fair Pricing",
-                  desc: "Instant online quotes with no hidden fees. What you see is what you pay — and you can pause anytime.",
+                  title: "Upfront pricing",
+                  desc: "Your quote is your price. No fuel surcharges, no footage fees, no surprises on the invoice.",
                 },
               ].map((f) => (
-                <Card
-                  key={f.title}
-                  className="group border-border bg-card transition-all hover:border-primary/40 hover:shadow-lg"
-                >
-                  <CardContent className="p-6">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                      <f.icon className="h-6 w-6" />
-                    </span>
-                    <h3 className="mt-4 text-lg font-bold">{f.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      {f.desc}
-                    </p>
-                  </CardContent>
-                </Card>
+                <div key={f.title} className="bg-card p-6">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <f.icon className="h-5 w-5" strokeWidth={2} />
+                  </span>
+                  <h3 className="mt-4 text-base font-semibold">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {f.desc}
+                  </p>
+                </div>
               ))}
             </div>
 
-            {/* Stats row */}
-            <div className="mt-14 grid grid-cols-2 gap-4 rounded-3xl bg-primary p-8 text-primary-foreground sm:grid-cols-4 lg:p-10">
+            {/* Stats band */}
+            <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-4">
               {[
-                { value: "10+", label: "years in business", icon: Clock },
-                { value: "2,400+", label: "lawns serviced in 2024", icon: Sprout },
-                { value: "4.9★", label: "187 Google reviews", icon: Star },
-                { value: "6", label: "cities served locally", icon: MapPin },
+                { value: "10 yrs", label: "serving the northwest metro" },
+                { value: "1,800+", label: "lawns maintained in 2024" },
+                { value: "4.9", label: "across 187 Google reviews" },
+                { value: "6 cities", label: "one local crew" },
               ].map((s) => (
-                <div key={s.label} className="text-center">
-                  <s.icon className="mx-auto mb-2 h-6 w-6 opacity-80" />
-                  <p className="text-3xl font-extrabold tracking-tight lg:text-4xl">
+                <div key={s.label} className="bg-card p-6 text-center">
+                  <p className="text-3xl font-bold tracking-tight tabular-nums">
                     {s.value}
                   </p>
-                  <p className="mt-1 text-sm text-primary-foreground/80">
+                  <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
                     {s.label}
                   </p>
                 </div>
@@ -305,44 +285,40 @@ export default function Home() {
         <section className="py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <Badge className="mb-3 rounded-full gap-1">
-                <Users className="h-3 w-3" /> How It Works
-              </Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                From quote to gorgeous lawn in 3 easy steps
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                How it works
+              </p>
+              <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                Three steps from quote to a maintained lawn
               </h2>
             </div>
 
-            <div className="relative mt-12 grid gap-8 md:grid-cols-3">
-              <div className="absolute left-0 right-0 top-8 hidden h-px bg-gradient-to-r from-transparent via-border to-transparent md:block" />
+            <div className="relative mt-14 grid gap-10 md:grid-cols-3">
+              <div className="absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-transparent via-border to-transparent md:block" />
               {[
                 {
-                  step: "1",
-                  title: "Get your instant quote",
-                  desc: "Tell us about your lawn in 60 seconds. See your estimated price immediately — no waiting for a callback.",
-                  icon: Sparkles,
+                  step: "01",
+                  title: "Tell us about your lawn",
+                  desc: "Answer a few questions and see your estimated price immediately. No waiting for a callback.",
                 },
                 {
-                  step: "2",
-                  title: "Pick a plan & schedule",
-                  desc: "Choose weekly, bi-weekly, or one-time. We'll lock in your service day and send a confirmation right away.",
-                  icon: CalendarCheck,
+                  step: "02",
+                  title: "We confirm on site",
+                  desc: "A crew lead stops by to verify the estimate and note specifics like gate codes or problem areas.",
                 },
                 {
-                  step: "3",
-                  title: "Enjoy a perfect lawn",
-                  desc: "Our uniformed crew shows up on schedule. You get text notifications and a flawless lawn — every time.",
-                  icon: Leaf,
+                  step: "03",
+                  title: "Service begins",
+                  desc: "Same crew, same day, every week. You get a text when we are on the way and when we are done.",
                 },
               ].map((s) => (
                 <div key={s.step} className="relative text-center">
-                  <div className="relative z-10 mx-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary bg-background shadow-sm">
-                    <s.icon className="h-7 w-7 text-primary" />
-                    <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                  <div className="relative z-10 mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background">
+                    <span className="text-sm font-bold tabular-nums text-primary">
                       {s.step}
                     </span>
                   </div>
-                  <h3 className="mt-5 text-lg font-bold">{s.title}</h3>
+                  <h3 className="mt-5 text-base font-semibold">{s.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {s.desc}
                   </p>
@@ -355,58 +331,54 @@ export default function Home() {
         {/* ===== TRANSFORMATION ===== */}
         <section className="border-y border-border bg-card/40 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+            <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
               <div className="relative">
-                <div className="relative aspect-[7/4] overflow-hidden rounded-3xl shadow-2xl ring-1 ring-border">
+                <div className="relative aspect-[7/4] overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
                   <Image
                     src="/images/transformation.png"
-                    alt="Lawn transformation showing patchy brown weeds lawn transformed into lush thick green grass"
+                    alt="A lawn transformation. Patchy, thin turf on the left, thick and green on the right, six weeks into a Green Leaf care program."
                     fill
                     className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    sizes="(max-width: 1024px) 100vw, 48vw"
                   />
-                </div>
-                <div className="absolute -bottom-5 right-4 rounded-2xl border border-border bg-card px-5 py-3 shadow-xl">
-                  <p className="text-xs font-medium text-muted-foreground">
-                    After 6 weeks of Green Leaf care
-                  </p>
-                  <p className="text-2xl font-extrabold text-primary">
-                    +92% healthier
-                  </p>
                 </div>
               </div>
               <div>
-                <Badge className="mb-3 rounded-full gap-1">
-                  <TrendingUp className="h-3 w-3" /> Real Results
-                </Badge>
-                <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                  From patchy &amp; weedy to thick &amp; green — in one season
-                </h2>
-                <p className="mt-4 text-lg text-muted-foreground">
-                  This Maple Grove lawn was thin, full of dandelions, and
-                  struggling after a harsh winter. Six weeks into our
-                  fertilization + aeration + weekly mowing program, it&apos;s
-                  the envy of the block.
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                  Real results
                 </p>
-                <ul className="mt-6 space-y-3">
+                <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                  A Maple Grove lawn, six weeks apart
+                </h2>
+                <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+                  This lawn came to us thin, weed-heavy, and recovering from a
+                  rough winter. We started with aeration and overseeding, built
+                  a five-treatment fertilizer program around it, and kept it at
+                  a 3.5-inch cut through summer. The photo on the right is six
+                  weeks in.
+                </p>
+                <ul className="mt-7 space-y-3">
                   {[
-                    "Custom 5-treatment fertilizer & weed program",
-                    "Core aeration and premium overseeding",
-                    "Weekly mowing at optimal height",
-                    "Zero weeds, zero bare spots",
+                    "Custom five-treatment fertilizer and weed program",
+                    "Core aeration with Kentucky bluegrass overseed",
+                    "Weekly mowing at 3.5 inches through summer",
+                    "No bare spots, no dandelions by mid-June",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3">
                       <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                        <BadgeCheck className="h-3.5 w-3.5 text-primary" />
+                        <Check
+                          className="h-3 w-3 text-primary"
+                          strokeWidth={3}
+                        />
                       </span>
-                      <span className="text-sm">{item}</span>
+                      <span className="text-[15px]">{item}</span>
                     </li>
                   ))}
                 </ul>
-                <Button asChild size="lg" className="mt-7 rounded-full">
+                <Button asChild size="lg" className="mt-8 rounded-full">
                   <a href="#quote">
-                    Transform my lawn
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    Get my estimate
+                    <ArrowUpRight className="ml-1.5 h-4 w-4" />
                   </a>
                 </Button>
               </div>
@@ -419,22 +391,21 @@ export default function Home() {
           id="quote"
           className="scroll-mt-20 relative overflow-hidden py-16 lg:py-24"
         >
-          <div className="absolute inset-0 -z-10 bg-grid opacity-50" />
-          <div className="absolute -top-20 left-1/2 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute inset-0 -z-10 bg-grid opacity-60" />
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <Badge className="mb-3 rounded-full gap-1">
-                <Sparkles className="h-3 w-3" /> Instant Quote
-              </Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                Get your free instant quote in 60 seconds
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                Instant estimate
+              </p>
+              <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                See your price in under a minute
               </h2>
-              <p className="mt-4 text-lg text-muted-foreground text-balance">
-                No waiting, no pressure. Tell us about your lawn and see your
-                estimated price right now.
+              <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-balance">
+                No waiting, no pressure. Tell us about your lawn and your
+                estimated price updates as you go.
               </p>
             </div>
-            <div className="mt-10">
+            <div className="mt-12">
               <QuoteForm />
             </div>
           </div>
@@ -446,40 +417,39 @@ export default function Home() {
           className="scroll-mt-20 border-y border-border bg-card/40 py-16 lg:py-24"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-8 lg:grid-cols-[1fr_1.6fr] lg:gap-12">
-              {/* Rating summary */}
+            <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-14">
               <div className="lg:sticky lg:top-24 lg:self-start">
-                <Badge className="mb-3 rounded-full gap-1">
-                  <Star className="h-3 w-3 fill-current" /> Google Reviews
-                </Badge>
-                <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                  Loved by 187 neighbors on Google
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                  Google reviews
+                </p>
+                <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                  Rated 4.9 by 187 neighbors
                 </h2>
-                <div className="mt-6 rounded-3xl border border-border bg-card p-6 shadow-sm">
+                <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-sm">
                   <div className="flex items-center gap-4">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-lg font-bold text-[#4285F4] shadow-sm">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-base font-bold text-[#4285F4] shadow-sm">
                       G
                     </span>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-4xl font-extrabold">4.9</span>
-                        <div className="flex flex-col">
-                          <div className="flex">
-                            {[0, 1, 2, 3, 4].map((i) => (
-                              <Star
-                                key={i}
-                                className="h-4 w-4 fill-amber-400 text-amber-400"
-                              />
-                            ))}
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            187 reviews
-                          </span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-bold tabular-nums">
+                          4.9
+                        </span>
+                        <div className="flex">
+                          {[0, 1, 2, 3, 4].map((i) => (
+                            <Star
+                              key={i}
+                              className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
+                            />
+                          ))}
                         </div>
                       </div>
+                      <p className="text-xs text-muted-foreground">
+                        187 reviews on Google
+                      </p>
                     </div>
                   </div>
-                  <div className="mt-5 space-y-2">
+                  <div className="mt-5 space-y-1.5">
                     {[
                       { stars: 5, pct: 92 },
                       { stars: 4, pct: 6 },
@@ -491,7 +461,9 @@ export default function Home() {
                         key={r.stars}
                         className="flex items-center gap-2 text-xs"
                       >
-                        <span className="w-3 font-medium">{r.stars}</span>
+                        <span className="w-3 font-medium tabular-nums">
+                          {r.stars}
+                        </span>
                         <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
                           <div
@@ -499,7 +471,7 @@ export default function Home() {
                             style={{ width: `${r.pct}%` }}
                           />
                         </div>
-                        <span className="w-8 text-right text-muted-foreground">
+                        <span className="w-8 text-right text-muted-foreground tabular-nums">
                           {r.pct}%
                         </span>
                       </div>
@@ -521,42 +493,41 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Review cards */}
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2">
                 {[
                   {
                     name: "Sarah M.",
                     area: "Maple Grove, MN",
                     time: "2 weeks ago",
-                    text: "Green Leaf completely transformed our lawn. We went from the worst yard on the block to the best in one season. The crew is always on time, professional, and the price was exactly what they quoted. Highly recommend!",
+                    text: "Green Leaf took over our lawn last spring after we fired the big national company. The difference is obvious. Same crew every week, they actually edge, and the price didn't go up after the first month. Wish we'd switched sooner.",
                   },
                   {
                     name: "Mike R.",
                     area: "Plymouth, MN",
                     time: "1 month ago",
-                    text: "I've used three other lawn companies over the years and these guys are by far the best. The instant quote was spot-on, no surprise fees, and my lawn has never looked greener. The text notifications are a nice touch.",
+                    text: "I got a quote in under a minute and they were out the same week. The fall aeration made a real difference this spring, way fewer bare spots.",
                   },
                   {
                     name: "Jennifer K.",
                     area: "Brooklyn Park, MN",
                     time: "1 month ago",
-                    text: "Their fall aeration and overseeding made a huge difference this spring. My grass came in so thick I barely have any weeds anymore. Worth every penny.",
+                    text: "Honest crew. They told me I didn't need the full program, just aeration and a winterizer. Saved me money and the lawn looks better than ever.",
                   },
                   {
                     name: "David L.",
                     area: "Osseo, MN",
                     time: "2 months ago",
-                    text: "Called them on a Monday for spring cleanup, they were out Wednesday. Fast, friendly, and they did an amazing job cleaning up a winter's worth of debris. New customer for life.",
+                    text: "Called Monday for a spring cleanup. They came Wednesday. The yard hadn't been touched since fall and they had it looking good in an afternoon.",
                   },
                 ].map((r) => (
                   <Card
                     key={r.name}
-                    className="border-border bg-card shadow-sm"
+                    className="border-border bg-card shadow-none"
                   >
                     <CardContent className="flex h-full flex-col p-5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
                             {r.name.charAt(0)}
                           </span>
                           <div>
@@ -566,7 +537,7 @@ export default function Home() {
                             </p>
                           </div>
                         </div>
-                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[10px] font-bold text-[#4285F4] shadow-sm">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[9px] font-bold text-[#4285F4] shadow-sm">
                           G
                         </span>
                       </div>
@@ -583,8 +554,8 @@ export default function Home() {
                           {r.time}
                         </span>
                       </div>
-                      <Quote className="mt-3 h-5 w-5 text-primary/30" />
-                      <p className="mt-1 flex-1 text-sm leading-relaxed text-muted-foreground">
+                      <Quote className="mt-3 h-4 w-4 text-primary/25" />
+                      <p className="mt-1.5 flex-1 text-[13.5px] leading-relaxed text-muted-foreground">
                         {r.text}
                       </p>
                     </CardContent>
@@ -598,20 +569,20 @@ export default function Home() {
         {/* ===== SERVICE AREAS ===== */}
         <section id="areas" className="scroll-mt-20 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+            <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
               <div>
-                <Badge className="mb-3 rounded-full gap-1">
-                  <MapPin className="h-3 w-3" /> Service Areas
-                </Badge>
-                <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                  Proudly serving the northwest Twin Cities metro
-                </h2>
-                <p className="mt-4 text-lg text-muted-foreground">
-                  Green Leaf Lawn Care is based in Maple Grove and serves
-                  homeowners across the northwest suburbs. If you&apos;re in
-                  one of these communities, we&apos;ve got you covered:
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                  Service areas
                 </p>
-                <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                  Serving the northwest Twin Cities
+                </h2>
+                <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+                  Green Leaf is based in Maple Grove and serves homeowners
+                  across the northwest suburbs. If your city is on this list,
+                  you are in our zone.
+                </p>
+                <div className="mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                   {[
                     "Maple Grove",
                     "Plymouth",
@@ -626,43 +597,44 @@ export default function Home() {
                     <a
                       key={city}
                       href="#quote"
-                      className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm font-medium transition-colors hover:border-primary/40 hover:bg-accent"
+                      className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2.5 text-sm font-medium transition-colors hover:border-primary/40 hover:bg-accent/50"
                     >
                       <MapPin className="h-3.5 w-3.5 text-primary" />
                       {city}
                     </a>
                   ))}
                 </div>
-                <p className="mt-5 text-sm text-muted-foreground">
-                  Don&apos;t see your city?{" "}
+                <p className="mt-6 text-sm text-muted-foreground">
+                  Don't see your city?{" "}
                   <a
                     href={PHONE_HREF}
                     className="font-semibold text-primary hover:underline"
                   >
                     Give us a call
-                  </a>{" "}
-                  — we&apos;re expanding and may already serve your area.
+                  </a>
+                  . We are expanding and may already serve your area.
                 </p>
               </div>
 
-              {/* Map embed mock */}
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                 <Image
                   src="/images/gallery-1.png"
-                  alt="Landscaped suburban backyard served by Green Leaf Lawn Care"
+                  alt="A landscaped backyard in the northwest Twin Cities served by Green Leaf Lawn Care"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  sizes="(max-width: 1024px) 100vw, 48vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-border bg-card/95 p-4 backdrop-blur-sm">
+                <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-border bg-background/95 p-4 backdrop-blur-sm">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                      <MapPin className="h-5 w-5" />
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <MapPin className="h-4 w-4" />
                     </span>
                     <div>
-                      <p className="font-bold">Green Leaf Lawn Care HQ</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm font-semibold">
+                        Green Leaf Lawn Care
+                      </p>
+                      <p className="text-xs text-muted-foreground">
                         1482 Oak Ridge Avenue, Maple Grove, MN 55369
                       </p>
                     </div>
@@ -677,26 +649,31 @@ export default function Home() {
         <section className="border-t border-border bg-card/40 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <Badge className="mb-3 rounded-full gap-1">
-                <Leaf className="h-3 w-3" /> Our Work
-              </Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                Lawns we&apos;re proud of
-              </h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                A small sample of the yards we keep beautiful across the
-                northwest metro.
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                Our work
               </p>
+              <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                Lawns we maintain
+              </h2>
             </div>
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                { src: "/images/gallery-1.png", alt: "Beautifully landscaped backyard with green grass" },
-                { src: "/images/gallery-2.png", alt: "Manicured front yard with crisp grass edging along sidewalk" },
-                { src: "/images/technician.png", alt: "Friendly Green Leaf lawn care technician on a green lawn" },
+                {
+                  src: "/images/gallery-1.png",
+                  alt: "A landscaped backyard with green grass and trimmed beds",
+                },
+                {
+                  src: "/images/gallery-2.png",
+                  alt: "A manicured front yard with crisp grass edging along the sidewalk",
+                },
+                {
+                  src: "/images/technician.png",
+                  alt: "A Green Leaf lawn care technician on a green lawn",
+                },
               ].map((g) => (
                 <div
                   key={g.src}
-                  className="group relative aspect-square overflow-hidden rounded-2xl shadow-md ring-1 ring-border"
+                  className="group relative aspect-[4/3] overflow-hidden rounded-xl ring-1 ring-border"
                 >
                   <Image
                     src={g.src}
@@ -715,15 +692,12 @@ export default function Home() {
         <section id="faq" className="scroll-mt-20 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <Badge className="mb-3 rounded-full gap-1">
-                <BadgeCheck className="h-3 w-3" /> FAQ
-              </Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-                Questions, answered
-              </h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Everything you need to know before we show up with the mowers.
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                FAQ
               </p>
+              <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                Things people ask before they call
+              </h2>
             </div>
             <div className="mt-10">
               <Faq />
@@ -732,8 +706,8 @@ export default function Home() {
         </section>
 
         {/* ===== FINAL CTA ===== */}
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 -z-10">
+        <section className="relative overflow-hidden border-t border-border bg-foreground text-background">
+          <div className="absolute inset-0 -z-10 opacity-25">
             <Image
               src="/images/grass-texture.png"
               alt=""
@@ -741,30 +715,28 @@ export default function Home() {
               className="object-cover"
               sizes="100vw"
             />
-            <div className="absolute inset-0 bg-foreground/70 backdrop-blur-[2px]" />
           </div>
-          <div className="mx-auto max-w-4xl px-4 py-20 text-center text-background sm:px-6 lg:px-8 lg:py-28">
-            <Leaf className="mx-auto h-12 w-12 text-primary" />
-            <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-balance sm:text-5xl">
-              Ready for the best-looking lawn on your block?
+          <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-28">
+            <Leaf className="mx-auto h-10 w-10 text-primary" strokeWidth={2} />
+            <h2 className="font-display mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
+              Ready to hand off the lawn?
             </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-lg text-background/85 text-balance">
-              Join 2,400+ happy homeowners across the northwest Twin Cities.
-              Get your free instant quote now — or call us and we&apos;ll take
-              care of the rest.
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-background/75 text-balance">
+              Get a quote in under a minute, or call and we will walk you
+              through it.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button asChild size="lg" className="rounded-full text-base">
+              <Button asChild size="lg" className="rounded-full">
                 <a href="#quote">
-                  Get My Free Quote
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  Get a quote
+                  <ArrowUpRight className="ml-1.5 h-4 w-4" />
                 </a>
               </Button>
               <Button
                 asChild
                 size="lg"
                 variant="secondary"
-                className="rounded-full text-base"
+                className="rounded-full"
               >
                 <a href={PHONE_HREF}>
                   <Phone className="mr-2 h-4 w-4" />
@@ -772,9 +744,9 @@ export default function Home() {
                 </a>
               </Button>
             </div>
-            <p className="mt-6 text-sm text-background/70">
-              Mon–Fri 7am–6pm · Sat 8am–4pm · Free estimates · Licensed &amp;
-              insured
+            <p className="mt-7 text-sm text-background/60">
+              Mon to Fri 7am to 6pm · Sat 8am to 4pm · Free estimates ·
+              Licensed and insured
             </p>
           </div>
         </section>
@@ -782,33 +754,34 @@ export default function Home() {
 
       {/* ===== FOOTER ===== */}
       <footer className="mt-auto border-t border-border bg-card">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-            {/* Brand + NAP */}
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
             <div>
               <Link href="#top" className="flex items-center gap-2.5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                  <Leaf className="h-5 w-5" />
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <Leaf className="h-5 w-5" strokeWidth={2.25} />
                 </span>
                 <span className="flex flex-col leading-none">
-                  <span className="text-base font-extrabold tracking-tight">
+                  <span className="text-[15px] font-bold tracking-tight">
                     Green Leaf
                   </span>
-                  <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-primary">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
                     Lawn Care
                   </span>
                 </span>
               </Link>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                 Family-owned residential lawn care serving the northwest Twin
-                Cities since 2014. A greener lawn, guaranteed.
+                Cities since 2014.
               </p>
               <div className="mt-5 space-y-2 text-sm">
                 <p className="flex items-start gap-2 text-muted-foreground">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  1482 Oak Ridge Avenue
-                  <br />
-                  Maple Grove, MN 55369
+                  <span>
+                    1482 Oak Ridge Avenue
+                    <br />
+                    Maple Grove, MN 55369
+                  </span>
                 </p>
                 <a
                   href={PHONE_HREF}
@@ -825,26 +798,10 @@ export default function Home() {
                   hello@greenleaflawncare.com
                 </a>
               </div>
-              <div className="mt-5 flex gap-2">
-                {[
-                  { icon: Facebook, label: "Facebook" },
-                  { icon: Instagram, label: "Instagram" },
-                ].map((s) => (
-                  <a
-                    key={s.label}
-                    href="#"
-                    aria-label={s.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-                  >
-                    <s.icon className="h-4 w-4" />
-                  </a>
-                ))}
-              </div>
             </div>
 
-            {/* Services */}
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-foreground">
                 Services
               </h3>
               <ul className="mt-4 space-y-2.5 text-sm">
@@ -868,9 +825,8 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Service Areas */}
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-foreground">
                 Service Areas
               </h3>
               <ul className="mt-4 space-y-2.5 text-sm">
@@ -894,23 +850,18 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Hours */}
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-foreground">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-foreground">
                 Hours
               </h3>
               <ul className="mt-4 space-y-2.5 text-sm">
                 <li className="flex justify-between gap-3 text-muted-foreground">
-                  <span>Mon – Fri</span>
-                  <span className="font-medium text-foreground">
-                    7am – 6pm
-                  </span>
+                  <span>Mon to Fri</span>
+                  <span className="font-medium text-foreground">7am to 6pm</span>
                 </li>
                 <li className="flex justify-between gap-3 text-muted-foreground">
                   <span>Saturday</span>
-                  <span className="font-medium text-foreground">
-                    8am – 4pm
-                  </span>
+                  <span className="font-medium text-foreground">8am to 4pm</span>
                 </li>
                 <li className="flex justify-between gap-3 text-muted-foreground">
                   <span>Sunday</span>
@@ -918,22 +869,20 @@ export default function Home() {
                 </li>
               </ul>
               <Button asChild className="mt-5 w-full rounded-full" size="sm">
-                <a href="#quote">Get Free Quote</a>
+                <a href="#quote">Get a quote</a>
               </Button>
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row">
+          <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row">
             <p>
-              © {new Date().getFullYear()} Green Leaf Lawn Care, LLC. All rights
-              reserved.
+              © {new Date().getFullYear()} Green Leaf Lawn Care, LLC. All
+              rights reserved.
             </p>
-            <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-primary" />
-                Licensed &amp; Insured · MN LIC #LC-2024-1482
-              </span>
-            </div>
+            <p className="flex items-center gap-1.5">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              Licensed and insured · MN Lic. #LC-2024-1482
+            </p>
           </div>
         </div>
       </footer>

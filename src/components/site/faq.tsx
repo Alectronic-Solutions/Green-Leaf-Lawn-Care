@@ -10,35 +10,35 @@ import {
 const FAQS = [
   {
     q: "Which areas do you serve?",
-    a: "Green Leaf Lawn Care proudly serves Maple Grove, Plymouth, Brooklyn Park, Osseo, Champlin, Dayton and surrounding communities in the northwest Twin Cities metro. Not sure if you're in our zone? Enter your address in the quote form or call us — we'll let you know right away.",
+    a: "Maple Grove, Plymouth, Brooklyn Park, Osseo, Champlin, and Dayton. If you're just outside those borders, call us. We add neighborhoods as crews expand.",
   },
   {
-    q: "How quickly can you start service?",
-    a: "For most new customers, we can schedule your first visit within 3–5 business days. Same-week starts are common during spring and summer. If you have an urgent need (a big event, overgrown lawn, or storm cleanup), let us know and we'll do everything we can to fit you in fast.",
+    q: "How quickly can you start?",
+    a: "Usually within the same week. During peak spring weeks it can stretch to 7 to 10 days. We tell you the exact start date before you commit to anything.",
   },
   {
-    q: "Do I need to be home for service?",
-    a: "Nope! The vast majority of our customers are at work while we service their lawn. As long as we can access the yard and any gates are unlocked, we'll handle the rest. We'll send you a text or email notification when the job is done.",
+    q: "Do I need to be home during service?",
+    a: "No. Most of our customers aren't home during the day. As long as we can reach the lawn and any gates are unlocked, we handle the rest. You get a text when the work is done.",
   },
   {
     q: "Are you licensed and insured?",
-    a: "Yes. Green Leaf Lawn Care is fully licensed in the state of Minnesota and carries comprehensive liability insurance. Our technicians are trained, background-checked, and certified for fertilizer and weed-control applications.",
+    a: "Yes. We carry general liability insurance and we're licensed for fertilizer and herbicide application in Minnesota. We can send a certificate of insurance to your HOA or property manager on request.",
   },
   {
-    q: "What's included in a standard mowing visit?",
-    a: "Every mowing visit includes: mowing at the ideal height for your grass type and current weather, precision edging along sidewalks, driveways and beds, and blowing of all hard surfaces so your property looks immaculate. We alternate mowing patterns to prevent compaction and promote upright growth.",
+    q: "What's included in a mowing visit?",
+    a: "Mowing at the right height for your grass type and the weather, edging along all sidewalks and drives, and blowing off every hard surface. We rotate the mowing pattern each visit so the grass grows upright and the soil doesn't compact.",
   },
   {
-    q: "Do you offer a satisfaction guarantee?",
-    a: "Absolutely. If you're not 100% happy with any visit, let us know within 48 hours and we'll come back to make it right — free of charge. Your satisfaction is the only way we keep your business, and we take that seriously.",
+    q: "What if I'm not happy with a visit?",
+    a: "Call or text us within 48 hours. The crew comes back and fixes it at no charge. We would rather fix it than lose you.",
   },
   {
-    q: "Can I pause or cancel service anytime?",
-    a: "Yes. We don't lock you into long-term contracts. Weekly and bi-weekly plans are month-to-month — just give us 48 hours' notice before your next scheduled visit to pause, skip, or cancel. No fees, no hassle.",
+    q: "Can I pause or cancel service?",
+    a: "Yes. There are no contracts. Give us 48 hours' notice before your next scheduled visit and you can pause for a week, skip a month, or cancel entirely. No fees.",
   },
   {
-    q: "How do payments work?",
-    a: "We keep it simple: we'll securely store your card on file and bill automatically after each visit, or send a monthly invoice — your choice. You'll get an itemized receipt by email. We accept all major credit and debit cards.",
+    q: "How does billing work?",
+    a: "You choose. We can bill per visit or send a monthly invoice. Most customers keep a card on file for automatic billing. You get an itemized receipt by email after every visit.",
   },
 ];
 
@@ -47,18 +47,18 @@ export function Faq() {
     <Accordion
       type="single"
       collapsible
-      className="mx-auto max-w-3xl rounded-3xl border border-border bg-card p-2 sm:p-4 shadow-sm"
+      className="mx-auto max-w-3xl rounded-2xl border border-border bg-card px-2 sm:px-4 shadow-sm"
     >
       {FAQS.map((faq, i) => (
         <AccordionItem
           key={i}
           value={`item-${i}`}
-          className="border-b border-border last:border-0 px-2 sm:px-4"
+          className="border-b border-border last:border-0 px-3 sm:px-5"
         >
-          <AccordionTrigger className="text-left text-base font-semibold hover:no-underline">
+          <AccordionTrigger className="text-left text-[15px] font-semibold hover:no-underline">
             {faq.q}
           </AccordionTrigger>
-          <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+          <AccordionContent className="text-[14px] leading-relaxed text-muted-foreground">
             {faq.a}
           </AccordionContent>
         </AccordionItem>

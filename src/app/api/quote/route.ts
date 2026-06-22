@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
-// Pricing logic — kept in sync with the client-side quote form.
+// Pricing logic, kept in sync with the client-side quote form.
 const SERVICE_BASE: Record<string, number> = {
   mowing: 45,
   fertilization: 65,
