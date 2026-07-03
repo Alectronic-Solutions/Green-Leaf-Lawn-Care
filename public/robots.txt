@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://alectronic-solutions.github.io/Green-Leaf-Lawn-Care/sitemap.xml

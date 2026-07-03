@@ -1,0 +1,16 @@
+{
+  "name": "Green Leaf Lawn Care",
+  "short_name": "Green Leaf",
+  "description": "Residential lawn care for the northwest Twin Cities.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4faf3",
+  "theme_color": "#26492f",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

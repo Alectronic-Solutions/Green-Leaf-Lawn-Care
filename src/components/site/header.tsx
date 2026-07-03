@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 const navLinks = [
   { label: "Services", href: "#services" },
   { label: "Why Us", href: "#why-us" },
-  { label: "Get a Quote", href: "#quote" },
   { label: "Reviews", href: "#reviews" },
   { label: "Service Areas", href: "#areas" },
   { label: "FAQ", href: "#faq" },
@@ -37,16 +36,18 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        scrolled
-          ? "bg-background/90 backdrop-blur-md border-b border-border"
-          : "bg-transparent"
-      )}
-    >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="https://alectronic-solutions.github.io/Green-Leaf-Lawn-Care" className="flex items-center gap-2.5 group">
+    <>
+      <header
+        className={cn(
+          "sticky top-0 z-50 w-full transition-all duration-300",
+          "bg-background/95 backdrop-blur-md border-b border-border",
+          scrolled
+            ? "lg:bg-background/90 lg:border-border"
+            : "lg:bg-transparent lg:border-transparent"
+        )}
+      >
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2.5 group">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Leaf className="h-5 w-5" strokeWidth={2.25} />
           </span>
@@ -93,6 +94,7 @@ export function SiteHeader() {
           <Menu className="h-5 w-5" />
         </button>
       </div>
+      </header>
 
       {open && (
         <div className="fixed inset-0 z-60 lg:hidden">
@@ -102,12 +104,16 @@ export function SiteHeader() {
           />
           <div className="absolute right-0 top-0 h-full w-[82%] max-w-sm bg-background shadow-2xl flex flex-col">
             <div className="flex h-16 items-center justify-between border-b border-border px-4">
-              <span className="flex items-center gap-2">
+              <Link
+                href="/"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2"
+              >
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Leaf className="h-4 w-4" />
                 </span>
                 <span className="font-bold">Green Leaf</span>
-              </span>
+              </Link>
               <button
                 aria-label="Close menu"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-accent"
@@ -144,6 +150,6 @@ export function SiteHeader() {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }

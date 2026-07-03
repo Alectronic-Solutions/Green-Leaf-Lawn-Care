@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { ScrollProgress } from "@/components/site/scroll-progress";
 
 const geistSans = Geist({
@@ -38,8 +37,10 @@ const keywords = [
   "lawn care estimate",
 ];
 
+const siteUrl = "https://alectronic-solutions.github.io/Green-Leaf-Lawn-Care";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://greenleaflawncare.example"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${businessName} | Residential Lawn Care in Maple Grove, MN`,
     template: `%s | ${businessName}`,
@@ -50,13 +51,14 @@ export const metadata: Metadata = {
   creator: businessName,
   applicationName: businessName,
   category: "Lawn Care Services",
+  manifest: "/site.webmanifest",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: `${businessName} | Residential Lawn Care in Maple Grove, MN`,
     description,
-    url: "https://greenleaflawncare.example",
+    url: siteUrl,
     siteName: businessName,
     type: "website",
     locale: "en_US",
@@ -91,9 +93,9 @@ const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LawnCareBusiness",
   name: businessName,
-  image: "https://greenleaflawncare.example/images/hero.png",
-  "@id": "https://greenleaflawncare.example",
-  url: "https://greenleaflawncare.example",
+  image: `${siteUrl}/images/hero.png`,
+  "@id": siteUrl,
+  url: siteUrl,
   telephone: "+1-763-555-0142",
   priceRange: "$$",
   description,
@@ -137,11 +139,6 @@ const localBusinessSchema = {
     ratingValue: "4.9",
     reviewCount: "187",
   },
-  sameAs: [
-    "https://www.google.com/maps",
-    "https://www.facebook.com",
-    "https://www.instagram.com",
-  ],
 };
 
 const serviceSchema = {
@@ -181,7 +178,6 @@ export default function RootLayout({
       >
         <ScrollProgress />
         {children}
-        <Toaster />
       </body>
     </html>
   );

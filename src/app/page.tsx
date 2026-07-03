@@ -12,10 +12,8 @@ import {
   Mail,
   ArrowUpRight,
   Quote,
-  Users,
   CalendarCheck,
   Check,
-  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,9 +28,15 @@ const PHONE_HREF = "tel:+17635550142";
 export default function Home() {
   return (
     <div id="top" className="flex min-h-screen flex-col bg-background">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
+      >
+        Skip to main content
+      </a>
       <SiteHeader />
 
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         {/* ===== HERO ===== */}
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0 -z-10">
@@ -111,7 +115,7 @@ export default function Home() {
                       1,800+
                     </span>
                     <p className="mt-0.5 text-[12px] text-muted-foreground">
-                      lawns maintained in 2024
+                      lawns maintained to date
                     </p>
                   </div>
                 </div>
@@ -219,41 +223,32 @@ export default function Home() {
             <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
-                  icon: ShieldCheck,
                   title: "Licensed and insured",
                   desc: "Fully licensed in Minnesota and insured. Certificate of insurance available on request.",
                 },
                 {
-                  icon: Check,
                   title: "Re-do guarantee",
                   desc: "If a visit is not right, the crew comes back within 48 hours and fixes it. No charge, no pushback.",
                 },
                 {
-                  icon: Sprout,
                   title: "Pet and family safe",
                   desc: "Fertilizer and weed-control products with re-entry intervals that work around your schedule.",
                 },
                 {
-                  icon: MapPin,
                   title: "Local crews",
                   desc: "Based in Maple Grove. Our crews know the soil, the grass varieties, and the weather here.",
                 },
                 {
-                  icon: Users,
                   title: "Same crew, same day",
                   desc: "You get the same two-person crew on the same day each week. They learn your property.",
                 },
                 {
-                  icon: TrendingUp,
                   title: "Upfront pricing",
                   desc: "Your quote is your price. No fuel surcharges, no footage fees, no surprises on the invoice.",
                 },
               ].map((f) => (
                 <div key={f.title} className="bg-card p-6">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <f.icon className="h-5 w-5" strokeWidth={2} />
-                  </span>
-                  <h3 className="mt-4 text-base font-semibold">{f.title}</h3>
+                  <h3 className="text-base font-semibold">{f.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {f.desc}
                   </p>
@@ -265,7 +260,7 @@ export default function Home() {
             <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-4">
               {[
                 { value: "10 yrs", label: "serving the northwest metro" },
-                { value: "1,800+", label: "lawns maintained in 2024" },
+                { value: "1,800+", label: "lawns maintained to date" },
                 { value: "4.9", label: "across 187 Google reviews" },
                 { value: "6 cities", label: "one local crew" },
               ].map((s) => (
