@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Phone, Leaf } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { LogoMark } from "@/components/site/logo-mark";
 
 const navLinks = [
   { label: "Services", href: "#services" },
@@ -19,14 +20,6 @@ const PHONE_HREF = "tel:+17635550142";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -39,23 +32,27 @@ export function SiteHeader() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-300",
-          "bg-background/95 backdrop-blur-md border-b border-border",
-          scrolled
-            ? "lg:bg-background/90 lg:border-border"
-            : "lg:bg-transparent lg:border-transparent"
+          "fixed top-0 left-0 z-50 w-full text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.45)] transition-all duration-300",
+          "border-b border-white/10 bg-emerald-950/60 backdrop-blur-xl",
+          "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_8px_32px_-8px_rgba(0,0,0,0.35)]"
         )}
       >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/10 via-white/0 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/50 to-transparent"
+        />
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Leaf className="h-5 w-5" strokeWidth={2.25} />
-          </span>
+          <LogoMark className="h-9 w-9" />
           <span className="flex flex-col leading-none">
-            <span className="text-[15px] font-bold tracking-tight text-foreground">
+            <span className="text-[15px] font-bold tracking-tight text-white">
               Green Leaf
             </span>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80">
               Lawn Care
             </span>
           </span>
@@ -66,7 +63,7 @@ export function SiteHeader() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-medium text-white/85 transition-colors hover:text-white"
             >
               {link.label}
             </a>
@@ -76,9 +73,9 @@ export function SiteHeader() {
         <div className="hidden items-center gap-5 lg:flex">
           <a
             href={PHONE_HREF}
-            className="flex items-center gap-2 text-sm font-semibold text-foreground transition-colors hover:text-primary"
+            className="flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-white/80"
           >
-            <Phone className="h-4 w-4 text-primary" />
+            <Phone className="h-4 w-4 text-primary-foreground" />
             {PHONE}
           </a>
           <Button asChild size="sm" className="rounded-full">
@@ -88,7 +85,7 @@ export function SiteHeader() {
 
         <button
           aria-label="Open menu"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-foreground lg:hidden hover:bg-accent"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white lg:hidden hover:bg-white/10"
           onClick={() => setOpen(true)}
         >
           <Menu className="h-5 w-5" />
@@ -109,9 +106,7 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-2"
               >
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Leaf className="h-4 w-4" />
-                </span>
+                <LogoMark className="h-8 w-8" />
                 <span className="font-bold">Green Leaf</span>
               </Link>
               <button

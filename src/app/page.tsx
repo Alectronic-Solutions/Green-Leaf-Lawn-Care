@@ -5,7 +5,6 @@ import {
   Phone,
   Star,
   ShieldCheck,
-  Leaf,
   Sprout,
   Clock,
   MapPin,
@@ -18,7 +17,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SiteHeader } from "@/components/site/header";
+import { HeroVideo } from "@/components/site/hero-video";
+import { LogoMark } from "@/components/site/logo-mark";
+import { GoogleGIcon } from "@/components/site/google-icon";
 import { SeasonalServices } from "@/components/site/seasonal-services";
+import { WhyGreenLeaf } from "@/components/site/why-green-leaf";
 import { QuoteForm } from "@/components/site/quote-form";
 import { Faq } from "@/components/site/faq";
 
@@ -36,35 +39,44 @@ export default function Home() {
       </a>
       <SiteHeader />
 
-      <main id="main" className="flex-1">
+      <main id="main" className="flex-1 pt-16">
         {/* ===== HERO ===== */}
-        <section className="relative overflow-hidden border-b border-border">
+        <section className="relative isolate min-h-[36rem] overflow-hidden lg:min-h-[42rem]">
           <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-grid opacity-70" />
-            <div className="absolute -top-32 -right-20 h-[32rem] w-[32rem] rounded-full bg-primary/10 blur-3xl" />
-            <div className="absolute top-1/2 -left-24 h-72 w-72 rounded-full bg-accent/40 blur-3xl" />
+            <HeroVideo
+              src={assetPath("/videos/hero-mowing.mp4")}
+              poster={assetPath("/images/hero-video-poster.jpg")}
+            />
+            <Image
+              src={assetPath("/images/hero-video-poster.jpg")}
+              alt="A lawn care technician mowing a residential lawn"
+              fill
+              priority
+              className="object-cover motion-safe:hidden"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-foreground/90 via-foreground/60 to-foreground/30" />
           </div>
 
-          <div className="mx-auto max-w-7xl px-4 pb-16 pt-12 sm:px-6 lg:pb-24 lg:pt-16 lg:px-8">
-            <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+          <div className="mx-auto max-w-7xl px-4 pb-8 pt-12 sm:px-6 lg:pb-12 lg:pt-24 lg:px-8">
+            <div className="flex flex-col items-start">
               {/* Copy */}
-              <div className="flex flex-col items-start lg:col-span-6">
-                <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 backdrop-blur-sm">
+              <div className="flex max-w-2xl flex-col items-start">
+                <div className="inline-flex items-center gap-2 rounded-full border border-background/20 bg-background/10 px-3 py-1 backdrop-blur-sm">
                   <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-60" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-amber-400" />
                   </span>
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-background">
                     Now booking summer service
                   </span>
                 </div>
 
-                <h1 className="font-display mt-6 text-[2.75rem] font-semibold leading-[1.04] tracking-[-0.02em] text-balance sm:text-[3.5rem] lg:text-[4rem]">
+                <h1 className="font-display mt-6 text-[2.75rem] font-semibold leading-[1.04] tracking-[-0.02em] text-balance text-background drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-[3.5rem] lg:text-[4rem]">
                   Residential lawn care,{" "}
-                  <span className="text-primary">done right</span> the first
+                  <span className="text-amber-300">done right</span> the first
                   time.
                 </h1>
-                <p className="mt-5 max-w-md text-[17px] leading-[1.6] text-muted-foreground text-balance">
+                <p className="mt-5 max-w-md text-[17px] leading-[1.6] text-background/90 text-balance drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
                   Weekly mowing, fertilization, aeration, and seasonal cleanup
                   for homes across the northwest Twin Cities. Upfront pricing,
                   the same crew every visit, and a lawn you don't have to
@@ -72,7 +84,7 @@ export default function Home() {
                 </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Button asChild size="lg" className="rounded-full text-[15px] shadow-md shadow-primary/20">
+                  <Button asChild size="lg" className="rounded-full bg-amber-400 text-[15px] text-foreground shadow-md shadow-amber-400/20 hover:bg-amber-300">
                     <a href="#quote">
                       Get a quote
                       <ArrowUpRight className="ml-1.5 h-4 w-4" />
@@ -82,7 +94,7 @@ export default function Home() {
                     asChild
                     size="lg"
                     variant="outline"
-                    className="rounded-full text-[15px] bg-card/60 backdrop-blur-sm"
+                    className="rounded-full border-background/40 bg-background/10 text-[15px] text-background backdrop-blur-sm hover:bg-background/20 hover:text-background"
                   >
                     <a href={PHONE_HREF}>
                       <Phone className="mr-2 h-4 w-4" />
@@ -103,74 +115,58 @@ export default function Home() {
                           />
                         ))}
                       </div>
-                      <span className="text-sm font-bold tabular-nums">4.9</span>
+                      <span className="text-sm font-bold tabular-nums text-background">4.9</span>
                     </div>
-                    <p className="mt-0.5 text-[12px] text-muted-foreground">
+                    <p className="mt-0.5 flex items-center gap-1 text-[12px] text-background/80">
+                      <GoogleGIcon className="h-3 w-3" />
                       187 Google reviews
                     </p>
                   </div>
-                  <div className="h-9 w-px bg-border" />
+                  <div className="h-9 w-px bg-background/25" />
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold tabular-nums">
+                    <span className="text-sm font-bold tabular-nums text-background">
                       1,800+
                     </span>
-                    <p className="mt-0.5 text-[12px] text-muted-foreground">
+                    <p className="mt-0.5 text-[12px] text-background/80">
                       lawns maintained to date
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Image */}
-              <div className="lg:col-span-6">
-                <div className="relative">
-                  <div className="relative aspect-4/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-border/80 sm:aspect-5/4 lg:aspect-4/5">
-                    <Image
-                      src={assetPath("/images/hero.png")}
-                      alt="A manicured lawn in front of a suburban home, maintained by Green Leaf Lawn Care"
-                      fill
-                      priority
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-foreground/25 via-transparent to-transparent" />
-                  </div>
-
-                  {/* Floating service chip */}
-                  <div className="absolute -bottom-5 -left-3 hidden rounded-xl border border-border bg-card p-3.5 shadow-lg sm:block">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <CalendarCheck className="h-5 w-5" strokeWidth={2} />
-                      </span>
-                      <div className="leading-tight">
-                        <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                          This week
-                        </p>
-                        <p className="text-sm font-bold">
-                          42 lawns scheduled
-                        </p>
-                      </div>
-                    </div>
+              {/* Floating service chip */}
+              <div className="mt-8 hidden rounded-xl border border-background/20 bg-background/10 p-3.5 backdrop-blur-sm sm:block">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/20 text-amber-400">
+                    <CalendarCheck className="h-5 w-5" strokeWidth={2} />
+                  </span>
+                  <div className="leading-tight">
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-background/70">
+                      This week
+                    </p>
+                    <p className="text-sm font-bold text-background">
+                      42 lawns scheduled
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Trust bar */}
-            <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-border pt-7 sm:grid-cols-4">
+            <div className="mt-10 grid grid-cols-4 gap-x-2 gap-y-0 border-t border-background/15 pt-6 sm:gap-x-6">
               {[
                 { icon: ShieldCheck, label: "Licensed and insured", sub: "MN Lic. #LC-2024-1482" },
                 { icon: Clock, label: "Same crew, same day", sub: "Every week, all season" },
                 { icon: Sprout, label: "Pet and family safe", sub: "Re-entry intervals that work" },
                 { icon: MapPin, label: "Free on-site estimates", sub: "We come to you, no charge" },
               ].map((t) => (
-                <div key={t.label} className="flex items-start gap-2.5">
-                  <t.icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2} />
+                <div key={t.label} className="flex flex-col items-start gap-1.5 sm:flex-row sm:items-start sm:gap-2.5">
+                  <t.icon className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={2} />
                   <div>
-                    <p className="text-[13px] font-semibold leading-tight">
+                    <p className="text-xs font-semibold leading-tight text-background sm:text-sm">
                       {t.label}
                     </p>
-                    <p className="mt-0.5 text-[11px] leading-tight text-muted-foreground">
+                    <p className="mt-0.5 hidden text-xs leading-tight text-background/70 sm:block">
                       {t.sub}
                     </p>
                   </div>
@@ -202,80 +198,7 @@ export default function Home() {
         </section>
 
         {/* ===== WHY GREEN LEAF ===== */}
-        <section
-          id="why-us"
-          className="scroll-mt-20 border-y border-border bg-card/40 py-16 lg:py-24"
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                Why Green Leaf
-              </p>
-              <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-                A local company that actually shows up
-              </h2>
-              <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-balance">
-                We are not a national chain or a side hustle. We live here, we
-                mow here, and we have been doing it for over ten years.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                {
-                  title: "Licensed and insured",
-                  desc: "Fully licensed in Minnesota and insured. Certificate of insurance available on request.",
-                },
-                {
-                  title: "Re-do guarantee",
-                  desc: "If a visit is not right, the crew comes back within 48 hours and fixes it. No charge, no pushback.",
-                },
-                {
-                  title: "Pet and family safe",
-                  desc: "Fertilizer and weed-control products with re-entry intervals that work around your schedule.",
-                },
-                {
-                  title: "Local crews",
-                  desc: "Based in Maple Grove. Our crews know the soil, the grass varieties, and the weather here.",
-                },
-                {
-                  title: "Same crew, same day",
-                  desc: "You get the same two-person crew on the same day each week. They learn your property.",
-                },
-                {
-                  title: "Upfront pricing",
-                  desc: "Your quote is your price. No fuel surcharges, no footage fees, no surprises on the invoice.",
-                },
-              ].map((f) => (
-                <div key={f.title} className="bg-card p-6">
-                  <h3 className="text-base font-semibold">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {f.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Stats band */}
-            <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-4">
-              {[
-                { value: "10 yrs", label: "serving the northwest metro" },
-                { value: "1,800+", label: "lawns maintained to date" },
-                { value: "4.9", label: "across 187 Google reviews" },
-                { value: "6 cities", label: "one local crew" },
-              ].map((s) => (
-                <div key={s.label} className="bg-card p-6 text-center">
-                  <p className="text-3xl font-bold tracking-tight tabular-nums">
-                    {s.value}
-                  </p>
-                  <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <WhyGreenLeaf />
 
         {/* ===== HOW IT WORKS ===== */}
         <section className="py-16 lg:py-24">
@@ -315,7 +238,7 @@ export default function Home() {
                     </span>
                   </div>
                   <h3 className="mt-5 text-base font-semibold">{s.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
                     {s.desc}
                   </p>
                 </div>
@@ -325,7 +248,7 @@ export default function Home() {
         </section>
 
         {/* ===== TRANSFORMATION ===== */}
-        <section className="border-y border-border bg-card/40 py-16 lg:py-24">
+        <section className="bg-card/40 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
               <div className="relative">
@@ -367,7 +290,7 @@ export default function Home() {
                           strokeWidth={3}
                         />
                       </span>
-                      <span className="text-[15px]">{item}</span>
+                      <span className="text-base">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -410,7 +333,7 @@ export default function Home() {
         {/* ===== REVIEWS ===== */}
         <section
           id="reviews"
-          className="scroll-mt-20 border-y border-border bg-card/40 py-16 lg:py-24"
+          className="scroll-mt-20 bg-card/40 py-16 lg:py-24"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-14">
@@ -423,8 +346,8 @@ export default function Home() {
                 </h2>
                 <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-sm">
                   <div className="flex items-center gap-4">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-base font-bold text-[#4285F4] shadow-sm">
-                      G
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm">
+                      <GoogleGIcon className="h-6 w-6" />
                     </span>
                     <div>
                       <div className="flex items-baseline gap-2">
@@ -536,28 +459,23 @@ export default function Home() {
                 ].map((r) => (
                   <Card
                     key={r.name}
-                    className="border-border bg-card shadow-none"
+                    className="border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
                   >
                     <CardContent className="flex h-full flex-col p-5">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <Image
-                            src={r.avatar}
-                            alt={r.name}
-                            width={36}
-                            height={36}
-                            className="rounded-full object-cover ring-1 ring-border"
-                          />
-                          <div>
-                            <p className="text-sm font-semibold">{r.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {r.area}
-                            </p>
-                          </div>
+                      <div className="flex items-center gap-3">
+                        <Image
+                          src={r.avatar}
+                          alt={r.name}
+                          width={36}
+                          height={36}
+                          className="rounded-full object-cover ring-1 ring-border"
+                        />
+                        <div>
+                          <p className="text-sm font-semibold">{r.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {r.area}
+                          </p>
                         </div>
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[9px] font-bold text-[#4285F4] shadow-sm">
-                          G
-                        </span>
                       </div>
                       <div className="mt-3 flex items-center gap-2">
                         <div className="flex">
@@ -573,7 +491,7 @@ export default function Home() {
                         </span>
                       </div>
                       <Quote className="mt-3 h-4 w-4 text-primary/25" />
-                      <p className="mt-1.5 flex-1 text-[13.5px] leading-relaxed text-muted-foreground">
+                      <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
                         {r.text}
                       </p>
                     </CardContent>
@@ -622,7 +540,7 @@ export default function Home() {
                     </a>
                   ))}
                 </div>
-                <p className="mt-6 text-sm text-muted-foreground">
+                <p className="mt-6 text-sm leading-relaxed text-muted-foreground sm:text-base">
                   Don't see your city?{" "}
                   <a
                     href={PHONE_HREF}
@@ -664,7 +582,7 @@ export default function Home() {
         </section>
 
         {/* ===== GALLERY ===== */}
-        <section className="border-t border-border bg-card/40 py-16 lg:py-24">
+        <section className="bg-card/40 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
@@ -736,22 +654,18 @@ export default function Home() {
         </section>
 
         {/* ===== FINAL CTA ===== */}
-        <section className="relative overflow-hidden border-t border-border bg-foreground text-background">
-          <div className="absolute inset-0 -z-10 opacity-25">
-            <Image
-              src={assetPath("/images/grass-texture.png")}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="100vw"
-            />
-          </div>
-          <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-28">
-            <Leaf className="mx-auto h-10 w-10 text-primary" strokeWidth={2} />
-            <h2 className="font-display mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
+        <section
+          className="relative overflow-hidden bg-foreground bg-cover bg-center bg-fixed text-background"
+          style={{
+            backgroundImage: `url(${assetPath("/images/grass-texture.png")})`,
+          }}
+        >
+          <div className="absolute inset-0 bg-foreground/80" />
+          <div className="relative mx-auto max-w-4xl px-4 py-12 text-center sm:px-6 lg:px-8 lg:py-16">
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-balance text-background drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)] sm:text-5xl">
               Ready to hand off the lawn?
             </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-background/75 text-balance">
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-background/90 text-balance drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
               Get a quote in under a minute, or call and we will walk you
               through it.
             </p>
@@ -774,7 +688,7 @@ export default function Home() {
                 </a>
               </Button>
             </div>
-            <p className="mt-7 text-sm text-background/60">
+            <p className="mt-7 text-sm text-background/75 sm:text-base">
               Mon to Fri 7am to 6pm · Sat 8am to 4pm · Free estimates ·
               Licensed and insured
             </p>
@@ -783,14 +697,12 @@ export default function Home() {
       </main>
 
       {/* ===== FOOTER ===== */}
-      <footer className="mt-auto border-t border-border bg-card">
+      <footer className="mt-auto bg-card">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
-            <div>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-[1.5fr_1fr_1fr_1fr]">
+            <div className="col-span-2 sm:col-span-1">
               <Link href="#top" className="flex items-center gap-2.5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Leaf className="h-5 w-5" strokeWidth={2.25} />
-                </span>
+                <LogoMark className="h-9 w-9" />
                 <span className="flex flex-col leading-none">
                   <span className="text-[15px] font-bold tracking-tight">
                     Green Leaf
@@ -904,7 +816,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-12 flex flex-col gap-3 pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <p>
               © {new Date().getFullYear()} Green Leaf Lawn Care, LLC. All
               rights reserved.
@@ -930,7 +842,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="mt-4 flex flex-col gap-1.5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-4 flex flex-row items-center justify-between gap-1.5 text-xs text-muted-foreground">
             <p>
               Designed by{" "}
               <a
@@ -944,7 +856,7 @@ export default function Home() {
             </p>
             <a
               href="#top"
-              className="hover:text-primary underline-offset-2 hover:underline self-end sm:self-auto"
+              className="mr-4 hover:text-primary underline-offset-2 hover:underline"
             >
               Back to top
             </a>

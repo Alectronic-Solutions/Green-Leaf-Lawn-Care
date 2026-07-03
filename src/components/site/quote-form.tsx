@@ -143,7 +143,7 @@ function ThankYouModal({
                 <p className="text-sm font-semibold">
                   {FIRST_VISIT_DISCOUNT_PCT}% off your first visit
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Applied automatically when service begins.
                 </p>
               </div>
@@ -154,7 +154,7 @@ function ThankYouModal({
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               What happens next
             </p>
-            <ol className="mt-2 space-y-1.5 text-sm">
+            <ol className="mt-2 space-y-2 text-sm leading-relaxed">
               <li>1. We call to confirm details and schedule your start date.</li>
               <li>2. A crew lead stops by to verify the estimate on site.</li>
               <li>3. Service begins on your scheduled day.</li>
@@ -288,7 +288,7 @@ export function QuoteForm() {
           <h3 className="mt-2 text-2xl font-bold tracking-tight">
             Get your estimate
           </h3>
-          <p className="mt-1.5 text-sm text-muted-foreground">
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
             Tell us about your property. Your estimated price updates as you go.
           </p>
 
@@ -304,7 +304,7 @@ export function QuoteForm() {
                   aria-invalid={!!errors.name}
                 />
                 {errors.name && (
-                  <p className="text-xs text-destructive">{errors.name}</p>
+                  <p className="text-sm text-destructive">{errors.name}</p>
                 )}
               </div>
               <div className="space-y-1.5">
@@ -318,7 +318,7 @@ export function QuoteForm() {
                   aria-invalid={!!errors.phone}
                 />
                 {errors.phone && (
-                  <p className="text-xs text-destructive">{errors.phone}</p>
+                  <p className="text-sm text-destructive">{errors.phone}</p>
                 )}
               </div>
             </div>
@@ -347,7 +347,7 @@ export function QuoteForm() {
                   aria-invalid={!!errors.address}
                 />
                 {errors.address && (
-                  <p className="text-xs text-destructive">{errors.address}</p>
+                  <p className="text-sm text-destructive">{errors.address}</p>
                 )}
               </div>
             </div>
@@ -442,7 +442,7 @@ export function QuoteForm() {
               "See my estimate"
             )}
           </Button>
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
+          <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-sm text-muted-foreground">
             <ShieldCheck className="h-3.5 w-3.5 text-primary" />
             We call once, within one business day. No spam, no obligation.
           </p>
@@ -486,7 +486,7 @@ export function QuoteForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-background/70">First visit</dt>
-                  <dd className="font-semibold tabular-nums text-primary">
+                  <dd className="font-semibold tabular-nums text-[oklch(0.75_0.19_150)]">
                     ${estimate.discountedFirst}{estimate.unit} ({FIRST_VISIT_DISCOUNT_PCT}% off)
                   </dd>
                 </div>
@@ -509,9 +509,9 @@ export function QuoteForm() {
                 ))}
               </ul>
 
-              <p className="mt-6 border-t border-background/15 pt-4 text-xs leading-relaxed text-background/55">
-                Estimates reflect typical jobs in your area. Final pricing is
-                confirmed on site.
+              <p className="mt-6 border-t border-background/15 pt-4 text-sm leading-relaxed text-background/55">
+                This is a typical price for your area — we&apos;ll confirm the
+                exact number on site.
               </p>
             </motion.div>
           </AnimatePresence>

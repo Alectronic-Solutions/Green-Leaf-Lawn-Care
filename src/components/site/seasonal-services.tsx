@@ -168,8 +168,8 @@ export function SeasonalServices() {
               className={cn(
                 "flex items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-semibold transition-all",
                 isActive
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-accent/60"
+                  ? "border-primary bg-primary text-primary-foreground shadow-md"
+                  : "border-border bg-card text-foreground shadow-sm hover:border-primary/40 hover:bg-accent/60 hover:shadow-md"
               )}
             >
               <Icon
@@ -215,7 +215,7 @@ export function SeasonalServices() {
                 <active.icon className="h-4 w-4" />
                 {active.label}
               </div>
-              <p className="mt-2 text-[15px] leading-relaxed text-background/95">
+              <p className="mt-2 text-base leading-relaxed text-background/95">
                 {active.blurb}
               </p>
             </div>
@@ -225,10 +225,10 @@ export function SeasonalServices() {
             {active.services.map((svc) => (
               <div
                 key={svc.name}
-                className="group flex flex-col rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/35"
+                className="group flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary/35 hover:shadow-lg"
               >
                 <h4 className="font-semibold leading-snug">{svc.name}</h4>
-                <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-muted-foreground">
+                <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
                   {svc.desc}
                 </p>
                 <div className="mt-4 flex items-baseline justify-between border-t border-border pt-3">
@@ -239,7 +239,7 @@ export function SeasonalServices() {
                 </div>
                 <a
                   href="#quote"
-                  className="mt-3 inline-flex items-center gap-1 text-[13px] font-semibold text-foreground transition-colors group-hover:text-primary"
+                  className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-foreground transition-colors group-hover:text-primary"
                 >
                   Add to my quote
                   <ArrowUpRight className="h-3.5 w-3.5" />
