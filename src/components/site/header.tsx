@@ -85,7 +85,7 @@ export function SiteHeader() {
 
         <button
           aria-label="Open menu"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white lg:hidden hover:bg-white/10"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-white lg:hidden hover:bg-white/10"
           onClick={() => setOpen(true)}
         >
           <Menu className="h-5 w-5" />
@@ -111,7 +111,7 @@ export function SiteHeader() {
               </Link>
               <button
                 aria-label="Close menu"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-accent"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-lg hover:bg-accent"
                 onClick={() => setOpen(false)}
               >
                 <X className="h-5 w-5" />

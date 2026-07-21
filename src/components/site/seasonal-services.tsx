@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { Sprout, Sun, Leaf, Snowflake, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { assetPath } from "@/lib/asset-path";
@@ -24,7 +24,7 @@ const SEASONS: Record<
     label: "Spring",
     short: "Mar–May",
     icon: Sprout,
-    image: assetPath("/images/spring.png"),
+    image: assetPath("/images/spring.webp"),
     blurb:
       "Snow mold cleanup, first feed, and soil prep to bring the lawn out of winter dormancy.",
     services: [
@@ -54,7 +54,7 @@ const SEASONS: Record<
     label: "Summer",
     short: "Jun–Aug",
     icon: Sun,
-    image: assetPath("/images/summer.png"),
+    image: assetPath("/images/summer.webp"),
     blurb:
       "Weekly mowing at the correct height, plus heat-safe feeding and targeted weed control.",
     services: [
@@ -84,7 +84,7 @@ const SEASONS: Record<
     label: "Fall",
     short: "Sep–Nov",
     icon: Leaf,
-    image: assetPath("/images/fall.png"),
+    image: assetPath("/images/fall.webp"),
     blurb:
       "The season that decides next year's lawn. Aeration, seed, and winterizer applied at the right time.",
     services: [
@@ -114,7 +114,7 @@ const SEASONS: Record<
     label: "Winter",
     short: "Dec–Feb",
     icon: Snowflake,
-    image: assetPath("/images/winter.png"),
+    image: assetPath("/images/winter.webp"),
     blurb:
       "Snow removal for driveways and walkways, with salting on every visit.",
     services: [
@@ -155,6 +155,7 @@ export function SeasonalServices() {
   const active = SEASONS[season];
 
   return (
+    <MotionConfig reducedMotion="user">
     <div>
       <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
         {(Object.keys(SEASONS) as Season[]).map((key) => {
@@ -250,5 +251,6 @@ export function SeasonalServices() {
         </motion.div>
       </AnimatePresence>
     </div>
+    </MotionConfig>
   );
 }

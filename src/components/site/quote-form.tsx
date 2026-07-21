@@ -353,12 +353,12 @@ export function QuoteForm() {
             </div>
 
             <div className="space-y-1.5">
-              <Label>Service</Label>
+              <Label htmlFor="q-service" id="q-service-label">Service</Label>
               <Select
                 value={form.service}
                 onValueChange={(v) => update("service", v)}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger id="q-service" aria-labelledby="q-service-label" className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -374,12 +374,12 @@ export function QuoteForm() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label>Lot size</Label>
+                <Label htmlFor="q-lot-size" id="q-lot-size-label">Lot size</Label>
                 <Select
                   value={form.lotSize}
                   onValueChange={(v) => update("lotSize", v)}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger id="q-lot-size" aria-labelledby="q-lot-size-label" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -392,12 +392,12 @@ export function QuoteForm() {
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label>Frequency</Label>
+                <Label htmlFor="q-frequency" id="q-frequency-label">Frequency</Label>
                 <Select
                   value={form.frequency}
                   onValueChange={(v) => update("frequency", v)}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger id="q-frequency" aria-labelledby="q-frequency-label" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

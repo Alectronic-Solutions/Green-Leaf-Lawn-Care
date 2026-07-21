@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/images/hero.png",
+        url: "/images/hero.webp",
         width: 1344,
         height: 768,
         alt: "A manicured lawn in front of a suburban home, maintained by Green Leaf Lawn Care",
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: businessName,
     description,
-    images: ["/images/hero.png"],
+    images: ["/images/hero.webp"],
   },
   robots: {
     index: true,
@@ -91,9 +91,9 @@ export const metadata: Metadata = {
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "LawnCareBusiness",
+  "@type": "HomeAndConstructionBusiness",
   name: businessName,
-  image: `${siteUrl}/images/hero.png`,
+  image: `${siteUrl}/images/hero.webp`,
   "@id": siteUrl,
   url: siteUrl,
   telephone: "+1-763-555-0142",
@@ -146,7 +146,7 @@ const serviceSchema = {
   "@type": "Service",
   serviceType: "Residential Lawn Care",
   provider: {
-    "@type": "LawnCareBusiness",
+    "@type": "HomeAndConstructionBusiness",
     name: businessName,
   },
   areaServed: "Maple Grove, MN and surrounding areas",

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { assetPath } from "@/lib/asset-path";
 import {
   Phone,
@@ -20,10 +21,15 @@ import { SiteHeader } from "@/components/site/header";
 import { HeroVideo } from "@/components/site/hero-video";
 import { LogoMark } from "@/components/site/logo-mark";
 import { GoogleGIcon } from "@/components/site/google-icon";
-import { SeasonalServices } from "@/components/site/seasonal-services";
 import { WhyGreenLeaf } from "@/components/site/why-green-leaf";
-import { QuoteForm } from "@/components/site/quote-form";
-import { Faq } from "@/components/site/faq";
+
+const SeasonalServices = dynamic(() =>
+  import("@/components/site/seasonal-services").then((m) => m.SeasonalServices)
+);
+const QuoteForm = dynamic(() =>
+  import("@/components/site/quote-form").then((m) => m.QuoteForm)
+);
+const Faq = dynamic(() => import("@/components/site/faq").then((m) => m.Faq));
 
 const PHONE = "(763) 555-0142";
 const PHONE_HREF = "tel:+17635550142";
@@ -63,8 +69,8 @@ export default function Home() {
               <div className="flex max-w-2xl flex-col items-start">
                 <div className="inline-flex items-center gap-2 rounded-full border border-background/20 bg-background/10 px-3 py-1 backdrop-blur-sm">
                   <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-60" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-amber-400" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rating opacity-60 motion-reduce:animate-none" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-rating" />
                   </span>
                   <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-background">
                     Now booking summer service
@@ -73,7 +79,7 @@ export default function Home() {
 
                 <h1 className="font-display mt-6 text-[2.75rem] font-semibold leading-[1.04] tracking-[-0.02em] text-balance text-background drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-[3.5rem] lg:text-[4rem]">
                   Residential lawn care,{" "}
-                  <span className="text-amber-300">done right</span> the first
+                  <span className="text-rating">done right</span> the first
                   time.
                 </h1>
                 <p className="mt-5 max-w-md text-[17px] leading-[1.6] text-background/90 text-balance drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
@@ -84,7 +90,7 @@ export default function Home() {
                 </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Button asChild size="lg" className="rounded-full bg-amber-400 text-[15px] text-foreground shadow-md shadow-amber-400/20 hover:bg-amber-300">
+                  <Button asChild size="lg" className="rounded-full bg-rating text-[15px] text-foreground shadow-md shadow-rating/20 hover:bg-rating/90">
                     <a href="#quote">
                       Get a quote
                       <ArrowUpRight className="ml-1.5 h-4 w-4" />
@@ -111,7 +117,7 @@ export default function Home() {
                         {[0, 1, 2, 3, 4].map((i) => (
                           <Star
                             key={i}
-                            className="h-4 w-4 fill-amber-400 text-amber-400"
+                            className="h-4 w-4 fill-rating text-rating"
                           />
                         ))}
                       </div>
@@ -137,7 +143,7 @@ export default function Home() {
               {/* Floating service chip */}
               <div className="mt-8 hidden rounded-xl border border-background/20 bg-background/10 p-3.5 backdrop-blur-sm sm:block">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/20 text-amber-400">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-rating/20 text-rating">
                     <CalendarCheck className="h-5 w-5" strokeWidth={2} />
                   </span>
                   <div className="leading-tight">
@@ -161,7 +167,7 @@ export default function Home() {
                 { icon: MapPin, label: "Free on-site estimates", sub: "We come to you, no charge" },
               ].map((t) => (
                 <div key={t.label} className="flex flex-col items-start gap-1.5 sm:flex-row sm:items-start sm:gap-2.5">
-                  <t.icon className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={2} />
+                  <t.icon className="h-4 w-4 shrink-0 text-rating" strokeWidth={2} />
                   <div>
                     <p className="text-xs font-semibold leading-tight text-background sm:text-sm">
                       {t.label}
@@ -254,7 +260,7 @@ export default function Home() {
               <div className="relative">
                 <div className="relative aspect-7/4 overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
                   <Image
-                    src={assetPath("/images/transformation.png")}
+                    src={assetPath("/images/transformation.webp")}
                     alt="A lawn transformation. Patchy, thin turf on the left, thick and green on the right, six weeks into a Green Leaf care program."
                     fill
                     className="object-cover"
@@ -358,7 +364,7 @@ export default function Home() {
                           {[0, 1, 2, 3, 4].map((i) => (
                             <Star
                               key={i}
-                              className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
+                              className="h-3.5 w-3.5 fill-rating text-rating"
                             />
                           ))}
                         </div>
@@ -383,10 +389,10 @@ export default function Home() {
                         <span className="w-3 font-medium tabular-nums">
                           {r.stars}
                         </span>
-                        <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                        <Star className="h-3 w-3 fill-rating text-rating" />
                         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
                           <div
-                            className="h-full rounded-full bg-amber-400"
+                            className="h-full rounded-full bg-rating"
                             style={{ width: `${r.pct}%` }}
                           />
                         </div>
@@ -482,7 +488,7 @@ export default function Home() {
                           {[0, 1, 2, 3, 4].map((i) => (
                             <Star
                               key={i}
-                              className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
+                              className="h-3.5 w-3.5 fill-rating text-rating"
                             />
                           ))}
                         </div>
@@ -554,7 +560,7 @@ export default function Home() {
 
               <div className="relative aspect-4/3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                 <Image
-                  src={assetPath("/images/gallery-1.png")}
+                  src={assetPath("/images/gallery-1.webp")}
                   alt="A landscaped backyard in the northwest Twin Cities served by Green Leaf Lawn Care"
                   fill
                   className="object-cover"
@@ -595,27 +601,27 @@ export default function Home() {
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
-                  src: assetPath("/images/gallery-1.png"),
+                  src: assetPath("/images/gallery-1.webp"),
                   alt: "A landscaped backyard with green grass and trimmed beds",
                 },
                 {
-                  src: assetPath("/images/gallery-2.png"),
+                  src: assetPath("/images/gallery-2.webp"),
                   alt: "A manicured front yard with crisp grass edging along the sidewalk",
                 },
                 {
-                  src: assetPath("/images/technician.png"),
+                  src: assetPath("/images/technician.webp"),
                   alt: "A Green Leaf technician mowing a residential lawn",
                 },
                 {
-                  src: assetPath("/images/summer.png"),
+                  src: assetPath("/images/summer.webp"),
                   alt: "A thick, healthy lawn during peak summer growth",
                 },
                 {
-                  src: assetPath("/images/fall.png"),
+                  src: assetPath("/images/fall.webp"),
                   alt: "Fall leaf removal and cleanup on a residential property",
                 },
                 {
-                  src: assetPath("/images/spring.png"),
+                  src: assetPath("/images/spring.webp"),
                   alt: "Fresh spring green-up after a Green Leaf fertilization program",
                 },
               ].map((g) => (
@@ -657,7 +663,7 @@ export default function Home() {
         <section
           className="relative overflow-hidden bg-foreground bg-cover bg-center bg-fixed text-background"
           style={{
-            backgroundImage: `url(${assetPath("/images/grass-texture.png")})`,
+            backgroundImage: `url(${assetPath("/images/grass-texture.webp")})`,
           }}
         >
           <div className="absolute inset-0 bg-foreground/80" />

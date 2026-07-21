@@ -42,6 +42,19 @@ const FAQS = [
   },
 ];
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+
 export function Faq() {
   return (
     <Accordion
@@ -49,6 +62,10 @@ export function Faq() {
       collapsible
       className="mx-auto max-w-3xl rounded-2xl border border-border bg-card px-2 sm:px-4 shadow-sm"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       {FAQS.map((faq, i) => (
         <AccordionItem
           key={i}
