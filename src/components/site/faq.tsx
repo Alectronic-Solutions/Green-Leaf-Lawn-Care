@@ -72,10 +72,10 @@ export function Faq() {
           value={`item-${i}`}
           className="border-b border-border last:border-0 px-3 sm:px-5"
         >
-          <AccordionTrigger className="text-left text-base font-semibold hover:no-underline">
-            {faq.q}
+          <AccordionTrigger className="text-base font-semibold hover:no-underline">
+            <span className="flex-1 text-center">{faq.q}</span>
           </AccordionTrigger>
-          <AccordionContent className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+          <AccordionContent className="text-center text-sm leading-relaxed text-muted-foreground sm:text-base">
             {faq.a}
           </AccordionContent>
         </AccordionItem>

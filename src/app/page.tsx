@@ -12,7 +12,6 @@ import {
   Mail,
   ArrowUpRight,
   Quote,
-  CalendarCheck,
   Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,9 +21,14 @@ import { HeroVideo } from "@/components/site/hero-video";
 import { LogoMark } from "@/components/site/logo-mark";
 import { GoogleGIcon } from "@/components/site/google-icon";
 import { WhyGreenLeaf } from "@/components/site/why-green-leaf";
+import { BeforeAfterSlider } from "@/components/site/before-after-slider";
+import { MobileQuickActions } from "@/components/site/mobile-quick-actions";
 
 const SeasonalServices = dynamic(() =>
   import("@/components/site/seasonal-services").then((m) => m.SeasonalServices)
+);
+const MowerReveal = dynamic(() =>
+  import("@/components/site/mower-reveal").then((m) => m.MowerReveal)
 );
 const QuoteForm = dynamic(() =>
   import("@/components/site/quote-form").then((m) => m.QuoteForm)
@@ -47,7 +51,7 @@ export default function Home() {
 
       <main id="main" className="flex-1 pt-16">
         {/* ===== HERO ===== */}
-        <section className="relative isolate min-h-[36rem] overflow-hidden lg:min-h-[42rem]">
+        <section className="relative isolate flex min-h-[44rem] flex-col overflow-hidden lg:h-[calc(100svh-4rem)] lg:min-h-[40rem]">
           <div className="absolute inset-0 -z-10">
             <HeroVideo
               src={assetPath("/videos/hero-mowing.mp4")}
@@ -61,23 +65,14 @@ export default function Home() {
               className="object-cover motion-safe:hidden"
             />
             <div className="absolute inset-0 bg-linear-to-t from-foreground/90 via-foreground/60 to-foreground/30" />
+            <div className="absolute inset-x-0 bottom-0 h-56 bg-linear-to-t from-background from-30% via-background/80 via-55% to-transparent" />
           </div>
 
-          <div className="mx-auto max-w-7xl px-4 pb-8 pt-12 sm:px-6 lg:pb-12 lg:pt-24 lg:px-8">
+          <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-between px-4 pb-10 pt-12 sm:px-6 lg:pb-8 lg:pt-16 lg:px-8">
             <div className="flex flex-col items-start">
               {/* Copy */}
               <div className="flex max-w-2xl flex-col items-start">
-                <div className="inline-flex items-center gap-2 rounded-full border border-background/20 bg-background/10 px-3 py-1 backdrop-blur-sm">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rating opacity-60 motion-reduce:animate-none" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-rating" />
-                  </span>
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-background">
-                    Now booking summer service
-                  </span>
-                </div>
-
-                <h1 className="font-display mt-6 text-[2.75rem] font-semibold leading-[1.04] tracking-[-0.02em] text-balance text-background drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-[3.5rem] lg:text-[4rem]">
+                <h1 className="font-display text-[2.75rem] font-semibold leading-[1.04] tracking-[-0.02em] text-balance text-background drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-[3.5rem] lg:text-[4rem]">
                   Residential lawn care,{" "}
                   <span className="text-rating">done right</span> the first
                   time.
@@ -117,7 +112,7 @@ export default function Home() {
                         {[0, 1, 2, 3, 4].map((i) => (
                           <Star
                             key={i}
-                            className="h-4 w-4 fill-rating text-rating"
+                            className="h-4 w-4 fill-star text-star"
                           />
                         ))}
                       </div>
@@ -140,39 +135,23 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Floating service chip */}
-              <div className="mt-8 hidden rounded-xl border border-background/20 bg-background/10 p-3.5 backdrop-blur-sm sm:block">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-rating/20 text-rating">
-                    <CalendarCheck className="h-5 w-5" strokeWidth={2} />
-                  </span>
-                  <div className="leading-tight">
-                    <p className="text-[11px] font-medium uppercase tracking-wider text-background/70">
-                      This week
-                    </p>
-                    <p className="text-sm font-bold text-background">
-                      42 lawns scheduled
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Trust bar */}
-            <div className="mt-10 grid grid-cols-4 gap-x-2 gap-y-0 border-t border-background/15 pt-6 sm:gap-x-6">
+            <div className="relative mt-10 grid grid-cols-4 gap-x-2 gap-y-0 pt-6 sm:gap-x-6 lg:mt-8">
               {[
                 { icon: ShieldCheck, label: "Licensed and insured", sub: "MN Lic. #LC-2024-1482" },
                 { icon: Clock, label: "Same crew, same day", sub: "Every week, all season" },
                 { icon: Sprout, label: "Pet and family safe", sub: "Re-entry intervals that work" },
                 { icon: MapPin, label: "Free on-site estimates", sub: "We come to you, no charge" },
               ].map((t) => (
-                <div key={t.label} className="flex flex-col items-start gap-1.5 sm:flex-row sm:items-start sm:gap-2.5">
+                <div key={t.label} className="flex flex-col items-center gap-1.5 text-center sm:flex-row sm:items-start sm:gap-2.5 sm:text-left">
                   <t.icon className="h-4 w-4 shrink-0 text-rating" strokeWidth={2} />
                   <div>
-                    <p className="text-xs font-semibold leading-tight text-background sm:text-sm">
+                    <p className="text-xs font-semibold leading-tight text-foreground sm:text-sm">
                       {t.label}
                     </p>
-                    <p className="mt-0.5 hidden text-xs leading-tight text-background/70 sm:block">
+                    <p className="mt-0.5 hidden text-xs leading-tight text-muted-foreground sm:block">
                       {t.sub}
                     </p>
                   </div>
@@ -183,7 +162,7 @@ export default function Home() {
         </section>
 
         {/* ===== SEASONAL SERVICES ===== */}
-        <section id="services" className="scroll-mt-20 py-16 lg:py-24">
+        <section id="services" className="scroll-mt-20 pb-16 pt-8 lg:pb-24 lg:pt-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
@@ -207,68 +186,18 @@ export default function Home() {
         <WhyGreenLeaf />
 
         {/* ===== HOW IT WORKS ===== */}
-        <section className="py-16 lg:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                How it works
-              </p>
-              <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-                Three steps from quote to a maintained lawn
-              </h2>
-            </div>
-
-            <div className="relative mt-14 grid gap-10 md:grid-cols-3">
-              <div className="absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-transparent via-border to-transparent md:block" />
-              {[
-                {
-                  step: "01",
-                  title: "Tell us about your lawn",
-                  desc: "Answer a few questions and see your estimated price immediately. No waiting for a callback.",
-                },
-                {
-                  step: "02",
-                  title: "We confirm on site",
-                  desc: "A crew lead stops by to verify the estimate and note specifics like gate codes or problem areas.",
-                },
-                {
-                  step: "03",
-                  title: "Service begins",
-                  desc: "Same crew, same day, every week. You get a text when we are on the way and when we are done.",
-                },
-              ].map((s) => (
-                <div key={s.step} className="relative text-center">
-                  <div className="relative z-10 mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background">
-                    <span className="text-sm font-bold tabular-nums text-primary">
-                      {s.step}
-                    </span>
-                  </div>
-                  <h3 className="mt-5 text-base font-semibold">{s.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                    {s.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <MowerReveal />
 
         {/* ===== TRANSFORMATION ===== */}
         <section className="bg-card/40 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-              <div className="relative">
-                <div className="relative aspect-7/4 overflow-hidden rounded-2xl shadow-lg ring-1 ring-border">
-                  <Image
-                    src={assetPath("/images/transformation.webp")}
-                    alt="A lawn transformation. Patchy, thin turf on the left, thick and green on the right, six weeks into a Green Leaf care program."
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 48vw"
-                  />
-                </div>
-              </div>
-              <div>
+              <BeforeAfterSlider
+                before="/images/transformation-before.webp"
+                after="/images/transformation-after.webp"
+                alt="A lawn transformation. Patchy, thin turf before, thick and green six weeks into a Green Leaf care program."
+              />
+              <div className="text-center lg:text-left">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                   Real results
                 </p>
@@ -282,7 +211,7 @@ export default function Home() {
                   a 3.5-inch cut through summer. The photo on the right is six
                   weeks in.
                 </p>
-                <ul className="mt-7 space-y-3">
+                <ul className="mx-auto mt-7 w-fit space-y-3 text-left lg:mx-0">
                   {[
                     "Custom five-treatment fertilizer and weed program",
                     "Core aeration with Kentucky bluegrass overseed",
@@ -300,9 +229,13 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <Button asChild size="lg" className="mt-8 rounded-full">
+                <Button
+                  asChild
+                  size="lg"
+                  className="mx-auto mt-8 flex w-fit rounded-full lg:mx-0"
+                >
                   <a href="#quote">
-                    Get my estimate
+                    Get an estimate
                     <ArrowUpRight className="ml-1.5 h-4 w-4" />
                   </a>
                 </Button>
@@ -364,7 +297,7 @@ export default function Home() {
                           {[0, 1, 2, 3, 4].map((i) => (
                             <Star
                               key={i}
-                              className="h-3.5 w-3.5 fill-rating text-rating"
+                              className="h-3.5 w-3.5 fill-star text-star"
                             />
                           ))}
                         </div>
@@ -389,7 +322,7 @@ export default function Home() {
                         <span className="w-3 font-medium tabular-nums">
                           {r.stars}
                         </span>
-                        <Star className="h-3 w-3 fill-rating text-rating" />
+                        <Star className="h-3 w-3 fill-star text-star" />
                         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
                           <div
                             className="h-full rounded-full bg-rating"
@@ -488,7 +421,7 @@ export default function Home() {
                           {[0, 1, 2, 3, 4].map((i) => (
                             <Star
                               key={i}
-                              className="h-3.5 w-3.5 fill-rating text-rating"
+                              className="h-3.5 w-3.5 fill-star text-star"
                             />
                           ))}
                         </div>
@@ -703,7 +636,7 @@ export default function Home() {
       </main>
 
       {/* ===== FOOTER ===== */}
-      <footer className="mt-auto bg-card">
+      <footer className="mt-auto bg-card pb-20 lg:pb-0">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-[1.5fr_1fr_1fr_1fr]">
             <div className="col-span-2 sm:col-span-1">
@@ -798,20 +731,20 @@ export default function Home() {
               </ul>
             </div>
 
-            <div>
+            <div className="col-span-2 text-center sm:col-span-1 sm:text-left">
               <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-foreground">
                 Hours
               </h3>
               <ul className="mt-4 space-y-2.5 text-sm">
-                <li className="flex justify-between gap-3 text-muted-foreground">
+                <li className="flex justify-center gap-3 text-muted-foreground sm:justify-between">
                   <span>Mon to Fri</span>
                   <span className="font-medium text-foreground">7am to 6pm</span>
                 </li>
-                <li className="flex justify-between gap-3 text-muted-foreground">
+                <li className="flex justify-center gap-3 text-muted-foreground sm:justify-between">
                   <span>Saturday</span>
                   <span className="font-medium text-foreground">8am to 4pm</span>
                 </li>
-                <li className="flex justify-between gap-3 text-muted-foreground">
+                <li className="flex justify-center gap-3 text-muted-foreground sm:justify-between">
                   <span>Sunday</span>
                   <span className="font-medium text-foreground">Closed</span>
                 </li>
@@ -822,12 +755,12 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col gap-3 pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-12 flex flex-col items-center gap-3 pt-6 text-center text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:text-left">
             <p>
               © {new Date().getFullYear()} Green Leaf Lawn Care, LLC. All
               rights reserved.
             </p>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
               <p className="flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4 text-primary" />
                 Licensed and insured · MN Lic. #LC-2024-1482
@@ -848,7 +781,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="mt-4 flex flex-row items-center justify-between gap-1.5 text-xs text-muted-foreground">
+          <div className="mt-4 flex flex-col items-center justify-center gap-2 text-center text-xs text-muted-foreground sm:flex-row sm:justify-between sm:text-left">
             <p>
               Designed by{" "}
               <a
@@ -862,13 +795,15 @@ export default function Home() {
             </p>
             <a
               href="#top"
-              className="mr-4 hover:text-primary underline-offset-2 hover:underline"
+              className="hover:text-primary underline-offset-2 hover:underline sm:mr-4"
             >
               Back to top
             </a>
           </div>
         </div>
       </footer>
+
+      <MobileQuickActions />
     </div>
   );
 }

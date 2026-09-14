@@ -9,6 +9,66 @@ import { assetPath } from "@/lib/asset-path";
 
 type Season = "spring" | "summer" | "fall" | "winter";
 
+const SEASON_THEME: Record<
+  Season,
+  {
+    active: string;
+    icon: string;
+    hoverBorder: string;
+    hoverBg: string;
+    cardBg: string;
+    cardBorder: string;
+    iconChip: string;
+    button: string;
+    buttonShadow: string;
+  }
+> = {
+  spring: {
+    active: "border-emerald-600 bg-emerald-600 text-white shadow-md",
+    icon: "text-emerald-600",
+    hoverBorder: "hover:border-emerald-600/40",
+    hoverBg: "hover:bg-emerald-50",
+    cardBg: "bg-emerald-50/60 dark:bg-emerald-950/20",
+    cardBorder: "border-emerald-900/8 hover:border-emerald-600/40",
+    iconChip: "bg-emerald-600 text-white",
+    button: "from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600",
+    buttonShadow: "shadow-emerald-900/20",
+  },
+  summer: {
+    active: "border-amber-500 bg-amber-500 text-white shadow-md",
+    icon: "text-amber-500",
+    hoverBorder: "hover:border-amber-500/40",
+    hoverBg: "hover:bg-amber-50",
+    cardBg: "bg-amber-50/60 dark:bg-amber-950/20",
+    cardBorder: "border-amber-900/8 hover:border-amber-500/40",
+    iconChip: "bg-amber-500 text-white",
+    button: "from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500",
+    buttonShadow: "shadow-amber-900/20",
+  },
+  fall: {
+    active: "border-orange-600 bg-orange-600 text-white shadow-md",
+    icon: "text-orange-600",
+    hoverBorder: "hover:border-orange-600/40",
+    hoverBg: "hover:bg-orange-50",
+    cardBg: "bg-orange-50/60 dark:bg-orange-950/20",
+    cardBorder: "border-orange-900/8 hover:border-orange-600/40",
+    iconChip: "bg-orange-600 text-white",
+    button: "from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600",
+    buttonShadow: "shadow-orange-900/20",
+  },
+  winter: {
+    active: "border-sky-600 bg-sky-600 text-white shadow-md",
+    icon: "text-sky-600",
+    hoverBorder: "hover:border-sky-600/40",
+    hoverBg: "hover:bg-sky-50",
+    cardBg: "bg-sky-50/60 dark:bg-sky-950/20",
+    cardBorder: "border-sky-900/8 hover:border-sky-600/40",
+    iconChip: "bg-sky-600 text-white",
+    button: "from-sky-600 to-sky-700 hover:from-sky-500 hover:to-sky-600",
+    buttonShadow: "shadow-sky-900/20",
+  },
+};
+
 const SEASONS: Record<
   Season,
   {
@@ -160,6 +220,7 @@ export function SeasonalServices() {
       <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
         {(Object.keys(SEASONS) as Season[]).map((key) => {
           const s = SEASONS[key];
+          const theme = SEASON_THEME[key];
           const Icon = s.icon;
           const isActive = key === season;
           return (
@@ -169,21 +230,22 @@ export function SeasonalServices() {
               className={cn(
                 "flex items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-semibold transition-all",
                 isActive
-                  ? "border-primary bg-primary text-primary-foreground shadow-md"
-                  : "border-border bg-card text-foreground shadow-sm hover:border-primary/40 hover:bg-accent/60 hover:shadow-md"
+                  ? theme.active
+                  : cn(
+                      "border-border bg-card text-foreground shadow-sm hover:shadow-md",
+                      theme.hoverBorder,
+                      theme.hoverBg
+                    )
               )}
             >
               <Icon
-                className={cn(
-                  "h-4 w-4",
-                  isActive ? "text-primary-foreground" : "text-primary"
-                )}
+                className={cn("h-4 w-4", isActive ? "text-white" : theme.icon)}
               />
               {s.label}
               <span
                 className={cn(
                   "text-[11px] font-normal tabular-nums",
-                  isActive ? "text-primary-foreground/70" : "text-muted-foreground"
+                  isActive ? "text-white/75" : "text-muted-foreground"
                 )}
               >
                 {s.short}
@@ -223,30 +285,51 @@ export function SeasonalServices() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            {active.services.map((svc) => (
-              <div
-                key={svc.name}
-                className="group flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary/35 hover:shadow-lg"
-              >
-                <h4 className="font-semibold leading-snug">{svc.name}</h4>
-                <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  {svc.desc}
-                </p>
-                <div className="mt-4 flex items-baseline justify-between border-t border-border pt-3">
-                  <span className="text-xs text-muted-foreground">from</span>
-                  <span className="text-base font-bold text-primary tabular-nums">
+            {active.services.map((svc) => {
+              const theme = SEASON_THEME[season];
+              return (
+                <div
+                  key={svc.name}
+                  className={cn(
+                    "group flex flex-col items-center rounded-2xl border p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl",
+                    theme.cardBg,
+                    theme.cardBorder
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "flex h-10 w-10 items-center justify-center rounded-full shadow-sm",
+                      theme.iconChip
+                    )}
+                  >
+                    <active.icon className="h-5 w-5" />
+                  </span>
+
+                  <h4 className="mt-3.5 font-semibold leading-snug">
+                    {svc.name}
+                  </h4>
+                  <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    {svc.desc}
+                  </p>
+
+                  <span className="mt-4 text-2xl font-bold tabular-nums text-foreground">
                     {svc.from}
                   </span>
+
+                  <a
+                    href="#quote"
+                    className={cn(
+                      "bg-noise btn-texture mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-linear-to-b px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg active:scale-[0.98]",
+                      theme.button,
+                      theme.buttonShadow
+                    )}
+                  >
+                    Add to my quote
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
                 </div>
-                <a
-                  href="#quote"
-                  className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-foreground transition-colors group-hover:text-primary"
-                >
-                  Add to my quote
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </a>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </motion.div>
       </AnimatePresence>
