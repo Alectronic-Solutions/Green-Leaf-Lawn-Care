@@ -51,7 +51,8 @@ function buzz(pattern: number | number[]) {
 
 function scuffLabel(scuffs: number) {
   if (scuffs === 0) return "Clean cut, not a single scuff.";
-  if (scuffs < 8) return `${scuffs} scuff${scuffs === 1 ? "" : "s"}, still counts.`;
+  if (scuffs < 8)
+    return `${scuffs} scuff${scuffs === 1 ? "" : "s"}, still counts.`;
   return `${scuffs} scuffs. Rough around the edges, but done.`;
 }
 
@@ -144,8 +145,22 @@ function MowerIcon({
         strokeLinecap="round"
       />
       <circle cx="12" cy="6" r="3.5" fill="oklch(0.28 0.02 156)" />
-      <rect x="16" y="26" width="26" height="14" rx="5" fill="oklch(0.646 0.222 41.116)" />
-      <rect x="16" y="26" width="26" height="5" rx="2.5" fill="oklch(0.72 0.19 55)" />
+      <rect
+        x="16"
+        y="26"
+        width="26"
+        height="14"
+        rx="5"
+        fill="oklch(0.646 0.222 41.116)"
+      />
+      <rect
+        x="16"
+        y="26"
+        width="26"
+        height="5"
+        rx="2.5"
+        fill="oklch(0.72 0.19 55)"
+      />
       {[22, 40].map((cx, i) => (
         <g
           key={cx}
@@ -248,7 +263,9 @@ export function MowerReveal() {
     // callback", not a setState called directly in the effect body, and it
     // still lands before the player can interact.
     const id = requestAnimationFrame(() => {
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const reduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
       reducedMotionRef.current = reduce;
       setReducedMotion(reduce);
       try {
@@ -428,7 +445,10 @@ export function MowerReveal() {
       el.style.backgroundColor = `oklch(${(0.45 + Math.random() * 0.25).toFixed(2)} 0.12 ${(130 + Math.random() * 25).toFixed(0)})`;
       el.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
       el.style.setProperty("--dy", `${Math.sin(angle) * dist - 10}px`);
-      el.style.setProperty("--rot", `${Math.round(Math.random() * 240 - 120)}deg`);
+      el.style.setProperty(
+        "--rot",
+        `${Math.round(Math.random() * 240 - 120)}deg`,
+      );
       el.addEventListener("animationend", () => el.remove(), { once: true });
       layer.appendChild(el);
     }
@@ -454,29 +474,32 @@ export function MowerReveal() {
 
   // Soft darkening toward the edges, drawn on both layers so mowed and
   // unmowed areas share the same lighting.
-  const drawVignette = useCallback((ctx: CanvasRenderingContext2D, w: number, h: number) => {
-    const g = ctx.createRadialGradient(
-      w / 2,
-      h / 2,
-      Math.min(w, h) * 0.35,
-      w / 2,
-      h / 2,
-      Math.max(w, h) * 0.75
-    );
-    g.addColorStop(0, "rgba(0,0,0,0)");
-    g.addColorStop(1, "rgba(0,0,0,0.22)");
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
+  const drawVignette = useCallback(
+    (ctx: CanvasRenderingContext2D, w: number, h: number) => {
+      const g = ctx.createRadialGradient(
+        w / 2,
+        h / 2,
+        Math.min(w, h) * 0.35,
+        w / 2,
+        h / 2,
+        Math.max(w, h) * 0.75,
+      );
+      g.addColorStop(0, "rgba(0,0,0,0)");
+      g.addColorStop(1, "rgba(0,0,0,0.22)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
 
-    // One light source, upper-left, on both layers. Sells the depth far
-    // more than any single texture does.
-    const sun = ctx.createLinearGradient(0, 0, w * 0.6, h);
-    sun.addColorStop(0, "rgba(255,255,235,0.16)");
-    sun.addColorStop(0.5, "rgba(255,255,235,0)");
-    sun.addColorStop(1, "rgba(0,0,0,0.12)");
-    ctx.fillStyle = sun;
-    ctx.fillRect(0, 0, w, h);
-  }, []);
+      // One light source, upper-left, on both layers. Sells the depth far
+      // more than any single texture does.
+      const sun = ctx.createLinearGradient(0, 0, w * 0.6, h);
+      sun.addColorStop(0, "rgba(255,255,235,0.16)");
+      sun.addColorStop(0.5, "rgba(255,255,235,0)");
+      sun.addColorStop(1, "rgba(0,0,0,0.12)");
+      ctx.fillStyle = sun;
+      ctx.fillRect(0, 0, w, h);
+    },
+    [],
+  );
 
   const drawBackground = useCallback(
     (ctx: CanvasRenderingContext2D, w: number, h: number) => {
@@ -504,8 +527,14 @@ export function MowerReveal() {
           const sheen = vertical
             ? ctx.createLinearGradient(x0, y0, x0, y0 + cellH)
             : ctx.createLinearGradient(x0, y0, x0 + cellW, y0);
-          sheen.addColorStop(0, `oklch(${(light + 0.05).toFixed(2)} ${chroma} ${hue})`);
-          sheen.addColorStop(1, `oklch(${(light - 0.04).toFixed(2)} ${chroma} ${hue})`);
+          sheen.addColorStop(
+            0,
+            `oklch(${(light + 0.05).toFixed(2)} ${chroma} ${hue})`,
+          );
+          sheen.addColorStop(
+            1,
+            `oklch(${(light - 0.04).toFixed(2)} ${chroma} ${hue})`,
+          );
           ctx.fillStyle = sheen;
           ctx.fillRect(x0, y0, cellW + 1, cellH + 1);
         }
@@ -530,76 +559,87 @@ export function MowerReveal() {
 
       drawVignette(ctx, w, h);
     },
-    [drawVignette]
+    [drawVignette],
   );
 
-  const drawGrass = useCallback((ctx: CanvasRenderingContext2D, w: number, h: number) => {
-    ctx.globalCompositeOperation = "source-over";
-    ctx.clearRect(0, 0, w, h);
+  const drawGrass = useCallback(
+    (ctx: CanvasRenderingContext2D, w: number, h: number) => {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.clearRect(0, 0, w, h);
 
-    const cols = colsRef.current;
-    const rows = rowsRef.current;
-    const cellW = cellWRef.current;
-    const cellH = cellHRef.current;
-    const grid = patternGridRef.current;
+      const cols = colsRef.current;
+      const rows = rowsRef.current;
+      const cellW = cellWRef.current;
+      const cellH = cellHRef.current;
+      const grid = patternGridRef.current;
 
-    for (let r = 0; r < rows; r++) {
-      const t = r / rows;
-      const lightA = 0.5 - t * 0.16;
-      const lightB = 0.44 - t * 0.14;
-      for (let c = 0; c < cols; c++) {
-        const isA = grid[r * cols + c] === 1;
-        ctx.fillStyle = isA
-          ? `oklch(${lightA.toFixed(2)} 0.07 150)`
-          : `oklch(${lightB.toFixed(2)} 0.075 145)`;
-        ctx.fillRect(c * cellW, r * cellH, cellW + 1, cellH + 1);
+      for (let r = 0; r < rows; r++) {
+        const t = r / rows;
+        const lightA = 0.5 - t * 0.16;
+        const lightB = 0.44 - t * 0.14;
+        for (let c = 0; c < cols; c++) {
+          const isA = grid[r * cols + c] === 1;
+          ctx.fillStyle = isA
+            ? `oklch(${lightA.toFixed(2)} 0.07 150)`
+            : `oklch(${lightB.toFixed(2)} 0.075 145)`;
+          ctx.fillRect(c * cellW, r * cellH, cellW + 1, cellH + 1);
+        }
       }
-    }
 
-    // Blades are drawn back-to-front (sorted by root y) so nearer blades
-    // overlap farther ones, and each one is a shaded body plus a thin lit
-    // edge on the sun side, which is what makes them read as round stalks
-    // instead of flat green lines.
-    const bladeCount = Math.round((w * h) / 70);
-    const blades: { x: number; y: number; bh: number; lean: number; light: number; hue: number; lw: number }[] = [];
-    for (let i = 0; i < bladeCount; i++) {
-      blades.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        bh: 10 + Math.random() * 24,
-        lean: (Math.random() - 0.5) * 14,
-        light: 0.3 + Math.random() * 0.24,
-        hue: 138 + Math.random() * 22,
-        lw: 1.6 + Math.random() * 1.6,
-      });
-    }
-    blades.sort((a, b) => a.y - b.y);
-    ctx.lineCap = "round";
-    for (const b of blades) {
-      const cx = b.x + b.lean / 2;
-      const cy = b.y - b.bh / 2;
-      const tx = b.x + b.lean;
-      const ty = b.y - b.bh;
+      // Blades are drawn back-to-front (sorted by root y) so nearer blades
+      // overlap farther ones, and each one is a shaded body plus a thin lit
+      // edge on the sun side, which is what makes them read as round stalks
+      // instead of flat green lines.
+      const bladeCount = Math.round((w * h) / 70);
+      const blades: {
+        x: number;
+        y: number;
+        bh: number;
+        lean: number;
+        light: number;
+        hue: number;
+        lw: number;
+      }[] = [];
+      for (let i = 0; i < bladeCount; i++) {
+        blades.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          bh: 10 + Math.random() * 24,
+          lean: (Math.random() - 0.5) * 14,
+          light: 0.3 + Math.random() * 0.24,
+          hue: 138 + Math.random() * 22,
+          lw: 1.6 + Math.random() * 1.6,
+        });
+      }
+      blades.sort((a, b) => a.y - b.y);
+      ctx.lineCap = "round";
+      for (const b of blades) {
+        const cx = b.x + b.lean / 2;
+        const cy = b.y - b.bh / 2;
+        const tx = b.x + b.lean;
+        const ty = b.y - b.bh;
 
-      // Shadow side / body.
-      ctx.strokeStyle = `oklch(${b.light.toFixed(2)} 0.11 ${b.hue.toFixed(0)})`;
-      ctx.lineWidth = b.lw;
-      ctx.beginPath();
-      ctx.moveTo(b.x, b.y);
-      ctx.quadraticCurveTo(cx, cy, tx, ty);
-      ctx.stroke();
+        // Shadow side / body.
+        ctx.strokeStyle = `oklch(${b.light.toFixed(2)} 0.11 ${b.hue.toFixed(0)})`;
+        ctx.lineWidth = b.lw;
+        ctx.beginPath();
+        ctx.moveTo(b.x, b.y);
+        ctx.quadraticCurveTo(cx, cy, tx, ty);
+        ctx.stroke();
 
-      // Lit edge, offset up-left toward the light.
-      ctx.strokeStyle = `oklch(${(b.light + 0.22).toFixed(2)} 0.12 ${(b.hue + 6).toFixed(0)} / 0.85)`;
-      ctx.lineWidth = Math.max(0.6, b.lw * 0.4);
-      ctx.beginPath();
-      ctx.moveTo(b.x - 0.7, b.y - 1);
-      ctx.quadraticCurveTo(cx - 0.7, cy - 1, tx - 0.5, ty - 0.5);
-      ctx.stroke();
-    }
+        // Lit edge, offset up-left toward the light.
+        ctx.strokeStyle = `oklch(${(b.light + 0.22).toFixed(2)} 0.12 ${(b.hue + 6).toFixed(0)} / 0.85)`;
+        ctx.lineWidth = Math.max(0.6, b.lw * 0.4);
+        ctx.beginPath();
+        ctx.moveTo(b.x - 0.7, b.y - 1);
+        ctx.quadraticCurveTo(cx - 0.7, cy - 1, tx - 0.5, ty - 0.5);
+        ctx.stroke();
+      }
 
-    drawVignette(ctx, w, h);
-  }, [drawVignette]);
+      drawVignette(ctx, w, h);
+    },
+    [drawVignette],
+  );
 
   const computePatternGrid = useCallback((patternIndex: number) => {
     const cols = colsRef.current;
@@ -666,7 +706,7 @@ export function MowerReveal() {
         drawBackground(bgCtx, rect.width, rect.height);
       }
     },
-    [computePatternGrid, drawGrass, drawBackground]
+    [computePatternGrid, drawGrass, drawBackground],
   );
 
   useEffect(() => {
@@ -697,7 +737,7 @@ export function MowerReveal() {
       colsRef.current = COLS;
       rowsRef.current = Math.max(
         MIN_ROWS,
-        Math.min(MAX_ROWS, Math.round(COLS / (rect.width / rect.height)))
+        Math.min(MAX_ROWS, Math.round(COLS / (rect.width / rect.height))),
       );
       cellWRef.current = rect.width / colsRef.current;
       cellHRef.current = rect.height / rowsRef.current;
@@ -715,42 +755,45 @@ export function MowerReveal() {
     };
   }, [setupPattern]);
 
-  const markVisited = useCallback((x0: number, y0: number, x1: number, y1: number) => {
-    const cols = colsRef.current;
-    const rows = rowsRef.current;
-    const cellW = cellWRef.current;
-    const cellH = cellHRef.current;
-    const cellMin = Math.min(cellW, cellH) || 1;
-    const visited = visitedRef.current;
-    const mowerR = mowerWidthRef.current / 2;
-    const rCells = Math.ceil(mowerR / cellMin) + 1;
+  const markVisited = useCallback(
+    (x0: number, y0: number, x1: number, y1: number) => {
+      const cols = colsRef.current;
+      const rows = rowsRef.current;
+      const cellW = cellWRef.current;
+      const cellH = cellHRef.current;
+      const cellMin = Math.min(cellW, cellH) || 1;
+      const visited = visitedRef.current;
+      const mowerR = mowerWidthRef.current / 2;
+      const rCells = Math.ceil(mowerR / cellMin) + 1;
 
-    const dist = Math.hypot(x1 - x0, y1 - y0);
-    const steps = Math.max(1, Math.ceil(dist / (cellMin / 2)));
+      const dist = Math.hypot(x1 - x0, y1 - y0);
+      const steps = Math.max(1, Math.ceil(dist / (cellMin / 2)));
 
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const x = x0 + (x1 - x0) * t;
-      const y = y0 + (y1 - y0) * t;
-      const col = Math.floor(x / cellW);
-      const row = Math.floor(y / cellH);
-      for (let dr = -rCells; dr <= rCells; dr++) {
-        const rr = row + dr;
-        if (rr < 0 || rr >= rows) continue;
-        for (let dc = -rCells; dc <= rCells; dc++) {
-          const cc = col + dc;
-          if (cc < 0 || cc >= cols) continue;
-          const cx = (cc + 0.5) * cellW;
-          const cy = (rr + 0.5) * cellH;
-          // Strict: the cell's center has to pass under the deck itself.
-          // No slack, so "100%" means the whole lawn really got cut.
-          if (Math.hypot(cx - x, cy - y) <= mowerR) {
-            visited[rr * cols + cc] = 1;
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const x = x0 + (x1 - x0) * t;
+        const y = y0 + (y1 - y0) * t;
+        const col = Math.floor(x / cellW);
+        const row = Math.floor(y / cellH);
+        for (let dr = -rCells; dr <= rCells; dr++) {
+          const rr = row + dr;
+          if (rr < 0 || rr >= rows) continue;
+          for (let dc = -rCells; dc <= rCells; dc++) {
+            const cc = col + dc;
+            if (cc < 0 || cc >= cols) continue;
+            const cx = (cc + 0.5) * cellW;
+            const cy = (rr + 0.5) * cellH;
+            // Strict: the cell's center has to pass under the deck itself.
+            // No slack, so "100%" means the whole lawn really got cut.
+            if (Math.hypot(cx - x, cy - y) <= mowerR) {
+              visited[rr * cols + cc] = 1;
+            }
           }
         }
       }
-    }
-  }, []);
+    },
+    [],
+  );
 
   const completePattern = useCallback(() => {
     stopEngine();
@@ -799,9 +842,16 @@ export function MowerReveal() {
         setupPattern(pickPatternIndex(patternIndexRef.current), true);
         setPhase("playing");
       },
-      reducedMotion ? 1200 : 2400
+      reducedMotion ? 1200 : 2400,
     );
-  }, [bestTimes, pickPatternIndex, playChime, reducedMotion, setupPattern, stopEngine]);
+  }, [
+    bestTimes,
+    pickPatternIndex,
+    playChime,
+    reducedMotion,
+    setupPattern,
+    stopEngine,
+  ]);
 
   const mowAt = useCallback(
     (x: number, y: number, cut: boolean) => {
@@ -860,27 +910,33 @@ export function MowerReveal() {
         });
       }
     },
-    [phase, markVisited, completePattern]
+    [phase, markVisited, completePattern],
   );
 
   // Does this segment pass over any grass that hasn't been cut yet?
-  const crossesUncut = useCallback((x0: number, y0: number, x1: number, y1: number) => {
-    const cols = colsRef.current;
-    const rows = rowsRef.current;
-    const cellW = cellWRef.current;
-    const cellH = cellHRef.current;
-    const cellMin = Math.min(cellW, cellH) || 1;
-    const visited = visitedRef.current;
-    const steps = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) / (cellMin / 2)));
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const col = Math.floor((x0 + (x1 - x0) * t) / cellW);
-      const row = Math.floor((y0 + (y1 - y0) * t) / cellH);
-      if (col < 0 || col >= cols || row < 0 || row >= rows) continue;
-      if (visited[row * cols + col] !== 1) return true;
-    }
-    return false;
-  }, []);
+  const crossesUncut = useCallback(
+    (x0: number, y0: number, x1: number, y1: number) => {
+      const cols = colsRef.current;
+      const rows = rowsRef.current;
+      const cellW = cellWRef.current;
+      const cellH = cellHRef.current;
+      const cellMin = Math.min(cellW, cellH) || 1;
+      const visited = visitedRef.current;
+      const steps = Math.max(
+        1,
+        Math.ceil(Math.hypot(x1 - x0, y1 - y0) / (cellMin / 2)),
+      );
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const col = Math.floor((x0 + (x1 - x0) * t) / cellW);
+        const row = Math.floor((y0 + (y1 - y0) * t) / cellH);
+        if (col < 0 || col >= cols || row < 0 || row >= rows) continue;
+        if (visited[row * cols + col] !== 1) return true;
+      }
+      return false;
+    },
+    [],
+  );
 
   const registerDirection = useCallback(
     (dir: Grain | null, x0: number, y0: number, x1: number, y1: number) => {
@@ -906,7 +962,7 @@ export function MowerReveal() {
       }
       return matches;
     },
-    [crossesUncut]
+    [crossesUncut],
   );
 
   const handlePointerMove = useCallback(
@@ -935,7 +991,7 @@ export function MowerReveal() {
           prev.x,
           prev.y,
           x,
-          y
+          y,
         );
         updateEngineSpeed(dist / dt, cut);
         if (dx > 2) headingRef.current = 1;
@@ -974,7 +1030,7 @@ export function MowerReveal() {
       spawnPuff,
       startEngine,
       updateEngineSpeed,
-    ]
+    ],
   );
 
   const handlePointerLeave = useCallback(() => {
@@ -991,7 +1047,7 @@ export function MowerReveal() {
       if (e.pointerType === "mouse") return;
       handlePointerLeave();
     },
-    [handlePointerLeave]
+    [handlePointerLeave],
   );
 
   const handleNewPattern = useCallback(() => {
@@ -1022,48 +1078,109 @@ export function MowerReveal() {
         </div>
 
         <div className="relative mt-14 grid gap-10 md:grid-cols-3">
-          {/* Uncut grass, automatically mowed away left to right on load
-              like a loading bar, revealing a clean stripe behind the mower.
-              Desktop only — there's no room to read this at mobile widths. */}
+          {/* A strip of uncut grass that a mower mows away left to right,
+              on a loop, revealing a striped lawn and the step digits as it
+              passes. Desktop only: there's no room for it at mobile widths,
+              where each step shows a plain digit instead. */}
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 hidden h-16 overflow-hidden md:block"
+            className="mow-track absolute inset-x-0 top-0 hidden h-16 overflow-hidden md:block"
           >
-            <div className="mow-track-grass absolute inset-0" />
-            <div className="mow-track-cut absolute inset-y-0 left-0" />
-            <svg
-              width="30"
-              height="26"
-              viewBox="0 0 40 32"
-              fill="none"
-              className="mow-track-icon absolute top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_2px_3px_rgba(0,0,0,0.35)]"
-            >
-              <path
-                d="M8 4 L22 18"
-                stroke="oklch(0.28 0.02 156)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
+            <div className="mow-track-grass" />
+            <div className="absolute inset-0 grid grid-cols-3 gap-10">
+              {STEPS.map((s, i) => (
+                <div
+                  key={s.step}
+                  className="flex items-end justify-center pb-1"
+                >
+                  <span className="mow-digit-uncut font-display text-4xl leading-none font-bold tabular-nums">
+                    {i + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="mow-track-cut">
+              <div className="mow-track-lawn" />
+              <div className="absolute inset-0 grid grid-cols-3 gap-10">
+                {STEPS.map((s, i) => (
+                  <div
+                    key={s.step}
+                    className="flex items-end justify-center pb-1"
+                  >
+                    <span className="mow-digit-cut font-display text-4xl leading-none font-bold tabular-nums">
+                      {i + 1}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mow-track-mower z-10 h-[38px] w-[46px]">
+              <span
+                className="mow-clipping"
+                style={
+                  {
+                    "--dx": "-14px",
+                    "--dy": "-12px",
+                    "--rot": "120deg",
+                    "--mow-d": "0ms",
+                  } as React.CSSProperties
+                }
               />
-              <circle cx="7" cy="3" r="2.3" fill="oklch(0.28 0.02 156)" />
-              <rect
-                x="10"
-                y="16"
-                width="18"
-                height="9"
-                rx="3.5"
-                fill="oklch(0.646 0.222 41.116)"
+              <span
+                className="mow-clipping"
+                style={
+                  {
+                    "--dx": "-10px",
+                    "--dy": "-18px",
+                    "--rot": "-90deg",
+                    "--mow-d": "160ms",
+                  } as React.CSSProperties
+                }
               />
-              <circle cx="14" cy="27" r="4" fill="oklch(0.21 0.015 160)" />
-              <circle cx="26" cy="27" r="4" fill="oklch(0.21 0.015 160)" />
-            </svg>
+              <span
+                className="mow-clipping"
+                style={
+                  {
+                    "--dx": "-18px",
+                    "--dy": "-7px",
+                    "--rot": "200deg",
+                    "--mow-d": "320ms",
+                  } as React.CSSProperties
+                }
+              />
+              <svg
+                width="46"
+                height="38"
+                viewBox="0 0 40 32"
+                fill="none"
+                className="drop-shadow-[0_2px_3px_rgba(0,0,0,0.35)]"
+              >
+                <path
+                  d="M8 4 L22 18"
+                  stroke="oklch(0.28 0.02 156)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <circle cx="7" cy="3" r="2.3" fill="oklch(0.28 0.02 156)" />
+                <rect
+                  x="10"
+                  y="16"
+                  width="18"
+                  height="9"
+                  rx="3.5"
+                  fill="oklch(0.646 0.222 41.116)"
+                />
+                <circle cx="14" cy="27" r="4" fill="oklch(0.21 0.015 160)" />
+                <circle cx="26" cy="27" r="4" fill="oklch(0.21 0.015 160)" />
+              </svg>
+            </div>
           </div>
           {STEPS.map((s, i) => (
             <div key={s.step} className="relative text-center">
-              <div className="relative z-10 flex h-16 items-center justify-center">
-                <span
-                  className="mow-digit font-display text-4xl font-bold tabular-nums sm:text-5xl"
-                  style={{ "--mow-i": i } as React.CSSProperties}
-                >
+              {/* Spacer under the mow track on desktop; a plain digit on
+                  mobile where the track is hidden. */}
+              <div className="flex h-16 items-center justify-center">
+                <span className="font-display text-4xl font-bold tabular-nums text-primary md:hidden">
                   {i + 1}
                 </span>
               </div>
@@ -1085,10 +1202,10 @@ export function MowerReveal() {
               Think you can stripe a lawn?
             </h3>
             <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-              No clicking, just run the mower over the grass. Classic stripes
-              go up and down, horizontal stripes go side to side, and
-              everything else cuts any way you like. Every last blade has to
-              come down before the next pattern grows in.
+              No clicking, just run the mower over the grass. Classic stripes go
+              up and down, horizontal stripes go side to side, and everything
+              else cuts any way you like. Every last blade has to come down
+              before the next pattern grows in.
             </p>
           </div>
 
@@ -1096,7 +1213,10 @@ export function MowerReveal() {
             ref={wrapRef}
             className="relative mt-6 aspect-4/3 w-full touch-none select-none overflow-hidden rounded-3xl border border-border shadow-[0_24px_48px_-20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.35)] sm:aspect-video"
           >
-            <canvas ref={bgCanvasRef} className="absolute inset-0 block h-full w-full" />
+            <canvas
+              ref={bgCanvasRef}
+              className="absolute inset-0 block h-full w-full"
+            />
             <canvas
               ref={grassCanvasRef}
               className="absolute inset-0 block h-full w-full origin-bottom cursor-none touch-none drop-shadow-[0_4px_5px_rgba(0,0,0,0.5)] transition-[opacity,transform] duration-700 ease-out"
@@ -1158,7 +1278,11 @@ export function MowerReveal() {
                         <span className="text-rating"> · New best!</span>
                       ) : (
                         <span className="text-muted-foreground">
-                          {" "}· Best {formatSeconds(bestTimes[patternName] ?? lastResult.ms)}
+                          {" "}
+                          · Best{" "}
+                          {formatSeconds(
+                            bestTimes[patternName] ?? lastResult.ms,
+                          )}
                         </span>
                       )}
                     </p>
@@ -1176,7 +1300,8 @@ export function MowerReveal() {
                       className="absolute top-1/2 h-2 w-2 rounded-sm motion-safe:animate-bounce"
                       style={{
                         left: `${8 + ((i * 71) % 84)}%`,
-                        backgroundColor: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+                        backgroundColor:
+                          CONFETTI_COLORS[i % CONFETTI_COLORS.length],
                         animationDelay: `${(i % 5) * 80}ms`,
                         animationDuration: "700ms",
                       }}
@@ -1190,7 +1315,9 @@ export function MowerReveal() {
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1.5 bg-foreground/10">
               <div
                 className="h-full bg-rating transition-[width] duration-150 ease-out"
-                style={{ width: `${Math.min(100, Math.floor(progress * 100))}%` }}
+                style={{
+                  width: `${Math.min(100, Math.floor(progress * 100))}%`,
+                }}
               />
             </div>
           </div>
@@ -1200,10 +1327,12 @@ export function MowerReveal() {
               grass under it uncuttable. */}
           <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-sm text-muted-foreground">
             <span>
-              Pattern: <span className="font-medium text-foreground">{patternName}</span>
+              Pattern:{" "}
+              <span className="font-medium text-foreground">{patternName}</span>
               {bestTimes[patternName] != null && (
                 <>
-                  {" "}· Best{" "}
+                  {" "}
+                  · Best{" "}
                   <span className="font-medium tabular-nums text-foreground">
                     {formatSeconds(bestTimes[patternName])}
                   </span>
@@ -1211,7 +1340,8 @@ export function MowerReveal() {
               )}
               {(timerRunning || elapsedMs > 0) && (
                 <span className="tabular-nums">
-                  {" "}· Time{" "}
+                  {" "}
+                  · Time{" "}
                   <span className="font-medium text-foreground">
                     {formatSeconds(elapsedMs)}
                   </span>
@@ -1221,9 +1351,17 @@ export function MowerReveal() {
             <span className="flex items-center gap-3">
               <span>
                 Mowed:{" "}
-                <span className="font-medium text-foreground">{completedCount}</span>
+                <span className="font-medium text-foreground">
+                  {completedCount}
+                </span>
                 {allTimeCount > completedCount && (
-                  <> · All-time <span className="font-medium text-foreground">{allTimeCount}</span></>
+                  <>
+                    {" "}
+                    · All-time{" "}
+                    <span className="font-medium text-foreground">
+                      {allTimeCount}
+                    </span>
+                  </>
                 )}
               </span>
               <button
