@@ -1,60 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
 
+// Thin reading-progress bar along the top edge. Driven by a motion value,
+// so scrolling never re-renders React.
 export function ScrollProgress() {
-  const [progress, setProgress] = useState(0);
-  const rafRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const update = () => {
-      const el = document.documentElement;
-      const scrolled = el.scrollTop || document.body.scrollTop;
-      const total = el.scrollHeight - el.clientHeight;
-      setProgress(total > 0 ? scrolled / total : 0);
-    };
-
-    const onScroll = () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(update);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    update();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 260, damping: 40, mass: 0.3 });
   return (
-    <div
-      className="fixed top-0 left-0 right-0 z-[9999] h-[3px] pointer-events-none"
-      style={{ background: "transparent" }}
-    >
-      {/* track */}
-      <div className="absolute inset-0 bg-black/5 dark:bg-white/5" />
-      {/* fill */}
-      <div
-        className="absolute inset-y-0 left-0 transition-[width] duration-75 ease-out"
-        style={{
-          width: `${progress * 100}%`,
-          background:
-            "linear-gradient(to right, oklch(0.42 0.09 155), oklch(0.58 0.075 165))",
-          boxShadow: "0 0 8px oklch(0.42 0.09 155 / 0.6)",
-        }}
-      />
-      {/* glowing tip */}
-      {progress > 0.005 && (
-        <div
-          className="absolute top-0 bottom-0 w-4 -translate-x-full"
-          style={{
-            left: `${progress * 100}%`,
-            background:
-              "linear-gradient(to right, transparent, oklch(0.58 0.075 165 / 0.8))",
-          }}
-        />
-      )}
-    </div>
+    <motion.div
+      aria-hidden
+      className="pointer-events-none fixed inset-x-0 top-0 z-60 h-0.75 origin-left bg-linear-to-r from-forest-500 via-moss-300 to-wheat-400"
+      style={{ scaleX }}
+    />
   );
 }

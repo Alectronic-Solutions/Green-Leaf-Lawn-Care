@@ -20,18 +20,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: 22
+          cache: npm
 
       - name: Install dependencies
-        run: bun install
+        run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Optional secrets/variables: NEXT_PUBLIC_SITE_URL (custom domain),
+      # NEXT_PUBLIC_FORM_ENDPOINT + NEXT_PUBLIC_FORM_ACCESS_KEY (live forms),
+      # NEXT_PUBLIC_GA4_ID or NEXT_PUBLIC_PLAUSIBLE_DOMAIN (analytics).
       - name: Build
-        run: bun run build
+        run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
-          NEXT_PUBLIC_BASE_PATH: /Green-Leaf-Lawn-Care
+          NEXT_PUBLIC_BASE_PATH: ${{ vars.NEXT_PUBLIC_BASE_PATH || '/Green-Leaf-Lawn-Care' }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_FORM_ENDPOINT: ${{ vars.NEXT_PUBLIC_FORM_ENDPOINT }}
+          NEXT_PUBLIC_FORM_ACCESS_KEY: ${{ secrets.NEXT_PUBLIC_FORM_ACCESS_KEY }}
+          NEXT_PUBLIC_GA4_ID: ${{ vars.NEXT_PUBLIC_GA4_ID }}
+          NEXT_PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.NEXT_PUBLIC_PLAUSIBLE_DOMAIN }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

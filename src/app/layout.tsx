@@ -1,183 +1,68 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import { Geist, Fraunces } from "next/font/google";
 import "./globals.css";
-import { ScrollProgress } from "@/components/site/scroll-progress";
+import { site } from "@/config/site";
+import { JsonLd } from "@/components/site/json-ld";
+import { localBusinessLd } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   weight: ["500", "600", "700"],
-  style: ["normal"],
   display: "swap",
 });
 
-const businessName = "Green Leaf Lawn Care";
-const description =
-  "Residential lawn care for the northwest Twin Cities. Weekly mowing, fertilization, aeration, and seasonal cleanup. Upfront pricing, same crew every visit. Based in Maple Grove, MN.";
-const keywords = [
-  "lawn care Maple Grove MN",
-  "lawn care service",
-  "lawn mowing",
-  "aeration and overseeding",
-  "leaf removal",
-  "lawn fertilization",
-  "residential lawn care",
-  "lawn care near me",
-  "Green Leaf Lawn Care",
-  "lawn care estimate",
-];
-
-const siteUrl = "https://alectronic-solutions.github.io/Green-Leaf-Lawn-Care";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(site.url),
   title: {
-    default: `${businessName} | Residential Lawn Care in Maple Grove, MN`,
-    template: `%s | ${businessName}`,
+    default: `${site.name} | Lawn Care in ${site.address.city}, ${site.address.region}`,
+    template: `%s | ${site.name}`,
   },
-  description,
-  keywords,
-  authors: [{ name: businessName }],
-  creator: businessName,
-  applicationName: businessName,
+  description: site.description,
+  applicationName: site.name,
+  authors: [{ name: site.name }],
+  creator: site.name,
   category: "Lawn Care Services",
-  manifest: "/site.webmanifest",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: `${businessName} | Residential Lawn Care in Maple Grove, MN`,
-    description,
-    url: siteUrl,
-    siteName: businessName,
-    type: "website",
-    locale: "en_US",
-    images: [
-      {
-        url: "/images/hero.webp",
-        width: 1344,
-        height: 768,
-        alt: "A manicured lawn in front of a suburban home, maintained by Green Leaf Lawn Care",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: businessName,
-    description,
-    images: ["/images/hero.webp"],
-  },
+  manifest: `${site.basePath}/site.webmanifest`,
+  formatDetection: { telephone: false },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
 };
 
-const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": "HomeAndConstructionBusiness",
-  name: businessName,
-  image: `${siteUrl}/images/hero.webp`,
-  "@id": siteUrl,
-  url: siteUrl,
-  telephone: "+1-763-555-0142",
-  priceRange: "$$",
-  description,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "1482 Oak Ridge Avenue",
-    addressLocality: "Maple Grove",
-    addressRegion: "MN",
-    postalCode: "55369",
-    addressCountry: "US",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 45.0725,
-    longitude: -93.4555,
-  },
-  areaServed: [
-    { "@type": "City", name: "Maple Grove" },
-    { "@type": "City", name: "Plymouth" },
-    { "@type": "City", name: "Brooklyn Park" },
-    { "@type": "City", name: "Osseo" },
-    { "@type": "City", name: "Champlin" },
-    { "@type": "City", name: "Dayton" },
-  ],
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "07:00",
-      closes: "18:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Saturday",
-      opens: "08:00",
-      closes: "16:00",
-    },
-  ],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.9",
-    reviewCount: "187",
-  },
+export const viewport: Viewport = {
+  themeColor: "#26492f",
+  width: "device-width",
+  initialScale: 1,
 };
 
-const serviceSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  serviceType: "Residential Lawn Care",
-  provider: {
-    "@type": "HomeAndConstructionBusiness",
-    name: businessName,
-  },
-  areaServed: "Maple Grove, MN and surrounding areas",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const { ga4Id, plausibleDomain } = site.analytics;
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(localBusinessSchema),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(serviceSchema),
-          }}
-        />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased bg-background text-foreground`}
-      >
-        <ScrollProgress />
+    <html lang="en">
+      <body className={`${geistSans.variable} ${fraunces.variable} font-sans antialiased`}>
+        <JsonLd data={localBusinessLd()} />
         {children}
+        {ga4Id && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="afterInteractive" />
+            <Script id="ga4" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${ga4Id}');`}
+            </Script>
+          </>
+        )}
+        {plausibleDomain && (
+          <Script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js" strategy="afterInteractive" />
+        )}
       </body>
     </html>
   );
