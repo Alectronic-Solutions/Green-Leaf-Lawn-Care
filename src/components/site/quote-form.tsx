@@ -1,62 +1,21 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Check,
-  Phone,
-  Calendar,
-  ShieldCheck,
-  X,
-  Leaf,
-  Loader2,
-  Lock,
-  Ruler,
-} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const PHONE = "(763) 555-0142";
-
-type ServiceKey =
-  | "mowing"
-  | "fertilization"
-  | "aeration"
-  | "leaf-removal"
-  | "spring-cleanup"
-  | "snow-removal";
-
-const SERVICES: Record<
-  ServiceKey,
-  { label: string; base: number; unit: string; short: string }
-> = {
-  mowing: { label: "Lawn Mowing & Edging", base: 45, unit: "/ visit", short: "lawn mowing" },
-  fertilization: {
-    label: "Fertilization & Weed Control",
-    base: 65,
-    unit: "/ treatment",
-    short: "fertilization",
-  },
-  aeration: {
-    label: "Aeration & Overseeding",
-    base: 180,
-    unit: " flat",
-    short: "aeration and overseeding",
-  },
-  "leaf-removal": { label: "Fall Leaf Removal", base: 90, unit: "/ visit", short: "leaf removal" },
-  "spring-cleanup": { label: "Spring Cleanup", base: 120, unit: " flat", short: "spring cleanup" },
-  "snow-removal": { label: "Snow Removal", base: 60, unit: "/ visit", short: "snow removal" },
-};
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Icon3D } from "@/components/site/icon-3d";
+import { services, unitLabel, getService } from "@/content/services";
+import { site, phoneHref } from "@/config/site";
+import { submitLead } from "@/lib/forms";
+import { track } from "@/lib/analytics";
+import { DURATION, EASE_SOFT } from "@/lib/motion";
+import { useClientValue } from "@/lib/use-client-value";
 
 // Ordered so the slider index maps straight to a tier. `sqft` is the
 // nominal size of the tier; typed square footage snaps to the nearest one.
@@ -70,12 +29,7 @@ const LOT_TIERS = [
 
 type LotKey = (typeof LOT_TIERS)[number]["key"];
 
-function tierIndex(key: LotKey) {
-  return Math.max(
-    0,
-    LOT_TIERS.findIndex((t) => t.key === key)
-  );
-}
+const tierIndex = (key: LotKey) => Math.max(0, LOT_TIERS.findIndex((t) => t.key === key));
 
 function nearestTier(sqft: number): LotKey {
   let best: (typeof LOT_TIERS)[number] = LOT_TIERS[0];
@@ -85,189 +39,76 @@ function nearestTier(sqft: number): LotKey {
   return best.key;
 }
 
-const FREQUENCIES: Record<
-  string,
-  { label: string; discount: number; visitsPerMonth: number; suffix: string }
-> = {
-  weekly: { label: "Weekly", discount: 0.1, visitsPerMonth: 4, suffix: "/ month" },
-  biweekly: { label: "Bi-weekly", discount: 0.05, visitsPerMonth: 2, suffix: "/ month" },
-  monthly: { label: "Monthly", discount: 0, visitsPerMonth: 1, suffix: "/ month" },
-  onetime: { label: "One-time", discount: 0, visitsPerMonth: 1, suffix: " one-time" },
+const FREQUENCIES: Record<string, { label: string; discount: number; visitsPerMonth: number }> = {
+  weekly: { label: "Weekly", discount: 0.1, visitsPerMonth: 4 },
+  biweekly: { label: "Every other week", discount: 0.05, visitsPerMonth: 2 },
+  monthly: { label: "Monthly", discount: 0, visitsPerMonth: 1 },
+  onetime: { label: "One time", discount: 0, visitsPerMonth: 1 },
 };
-
-const FIRST_VISIT_DISCOUNT_PCT = 10;
 
 const EMPTY_FORM = {
   name: "",
   email: "",
   phone: "",
   address: "",
-  service: "mowing" as ServiceKey,
+  // Empty until the visitor picks one; until then the URL prefill or the
+  // first service is used.
+  service: "",
   lotSize: "quarter" as LotKey,
   sqft: "",
   frequency: "weekly",
+  promo: null as string | null,
   message: "",
 };
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
-function ThankYouModal({
-  open,
-  name,
-  estimate,
-  introLocked,
-  onClose,
-}: {
-  open: boolean;
-  name: string;
-  estimate: {
-    perVisit: number;
-    unit: string;
-    serviceShort: string;
-    discountedFirst: number;
-  };
-  introLocked: boolean;
-  onClose: () => void;
-}) {
-  if (!open) return null;
-  return (
-    <div className="fixed inset-0 z-80 flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-foreground/40 backdrop-blur-sm"
-        onClick={onClose}
-      />
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 12 }}
-        transition={{ duration: 0.22, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
-      >
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
-        <div className="p-8 text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.1, type: "spring", stiffness: 220, damping: 16 }}
-            >
-              <Check className="h-8 w-8 text-primary" strokeWidth={2.5} />
-            </motion.div>
-          </div>
-
-          <h3 className="mt-5 text-2xl font-bold tracking-tight">
-            Thanks for submitting!
-          </h3>
-          <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-            This is a demo site built by{" "}
-            <span className="font-semibold text-foreground">Alectronic Solutions</span>
-            . In a live deployment, {name.split(" ")[0] || "you"} would receive a
-            callback within one business hour to confirm your{" "}
-            {estimate.serviceShort} estimate of{" "}
-            <span className="font-semibold text-foreground">
-              ${estimate.perVisit}
-              {estimate.unit}
-            </span>
-            .
-          </p>
-
-          <div className="mt-5 rounded-xl bg-primary/8 border border-primary/15 p-4 text-left">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                <Leaf className="h-4 w-4 text-primary" />
-              </span>
-              <div>
-                <p className="text-sm font-semibold">
-                  {introLocked
-                    ? `Intro rate locked: $${estimate.discountedFirst}${estimate.unit} on your first visit`
-                    : `${FIRST_VISIT_DISCOUNT_PCT}% off your first visit`}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Applied automatically when service begins.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-5 rounded-xl bg-accent/60 p-4 text-left">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              What happens next
-            </p>
-            <ol className="mt-2 space-y-2 text-sm leading-relaxed">
-              <li>1. We call to confirm details and schedule your start date.</li>
-              <li>2. A crew lead stops by to verify the estimate on site.</li>
-              <li>3. Service begins on your scheduled day.</li>
-            </ol>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-3">
-            <Button asChild size="lg" className="w-full rounded-full">
-              <a href="tel:+17635550142">
-                <Phone className="mr-2 h-4 w-4" />
-                Call {PHONE}
-              </a>
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full rounded-full"
-              onClick={onClose}
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-export function QuoteForm() {
+export function QuoteForm({ compact = false }: { compact?: boolean }) {
+  const router = useRouter();
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [introLocked, setIntroLocked] = useState(false);
+  const [trap, setTrap] = useState("");
   const nameRef = useRef<HTMLInputElement>(null);
 
-  const [form, setForm] = useState(EMPTY_FORM);
+  // Prefill from links like /quote?service=aeration-overseeding&promo=STRIPES10
+  const search = useClientValue(() => window.location.search, "");
+  const params = useMemo(() => new URLSearchParams(search), [search]);
+  const urlService = params.get("service");
+  const serviceSlug = form.service || (urlService && getService(urlService) ? urlService : services[0].slug);
+  const promo = form.promo ?? (params.get("promo") ?? "").toUpperCase().slice(0, 24);
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const promoValid = promo.trim().toUpperCase() === site.offers.gamePromo.code;
 
   const estimate = useMemo(() => {
-    const service = SERVICES[form.service];
+    const service = getService(serviceSlug) ?? services[0];
     const lot = LOT_TIERS[tierIndex(form.lotSize)];
     const freq = FREQUENCIES[form.frequency];
     // Flat-rate jobs are priced once; frequency does not discount or repeat them.
-    const isFlat = service.unit === " flat";
+    const isFlat = service.price.unit === "flat";
     const isOneTime = form.frequency === "onetime" || isFlat;
     const discount = isFlat ? 0 : freq.discount;
-    const perVisit = Math.round(service.base * lot.mult * (1 - discount));
+    const perVisit = Math.round(service.price.from * lot.mult * (1 - discount));
     const total = isOneTime ? perVisit : perVisit * freq.visitsPerMonth;
-    const discountedFirst = Math.round(
-      perVisit * (1 - FIRST_VISIT_DISCOUNT_PCT / 100)
-    );
+    const firstPct = site.offers.firstVisitPct + (promoValid ? site.offers.gamePromo.pct : 0);
     return {
       perVisit,
       total,
-      discountedFirst,
+      firstPct,
+      discountedFirst: Math.round(perVisit * (1 - firstPct / 100)),
       discountPct: Math.round(discount * 100),
-      serviceShort: service.short,
-      unit: service.unit,
-      frequency: freq.label,
-      suffix: freq.suffix,
+      name: service.name,
+      unit: isFlat ? "" : unitLabel[service.price.unit],
+      frequency: isFlat ? "One time" : freq.label,
       isOneTime,
       lotLabel: lot.label,
       lotSqft: lot.sqft,
     };
-  }, [form.service, form.lotSize, form.frequency]);
+  }, [serviceSlug, form.lotSize, form.frequency, promoValid]);
 
-  const update = (key: keyof typeof EMPTY_FORM, value: string) => {
+  const update = (key: Exclude<keyof typeof EMPTY_FORM, "promo">, value: string) => {
     setForm((f) => ({ ...f, [key]: value }));
     if (errors[key]) setErrors((e) => ({ ...e, [key]: "" }));
   };
@@ -280,426 +121,353 @@ export function QuoteForm() {
   const setSqft = (raw: string) => {
     const digits = raw.replace(/[^\d]/g, "").slice(0, 7);
     const n = Number(digits);
-    setForm((f) => ({
-      ...f,
-      sqft: digits,
-      lotSize: digits && n > 0 ? nearestTier(n) : f.lotSize,
-    }));
-  };
-
-  const lockIntroRate = () => {
-    setIntroLocked(true);
-    nameRef.current?.focus();
+    setForm((f) => ({ ...f, sqft: digits, lotSize: digits && n > 0 ? nearestTier(n) : f.lotSize }));
   };
 
   const validate = () => {
     const next: Record<string, string> = {};
-    if (!form.name.trim()) next.name = "Required";
-    if (!form.phone.trim()) next.phone = "Required";
-    if (!form.address.trim()) next.address = "Required";
+    if (!form.name.trim()) next.name = "Please add your name.";
+    if (form.phone.replace(/\D/g, "").length < 10) next.phone = "Please add a 10-digit phone number.";
+    if (!form.address.trim()) next.address = "Please add the service address.";
+    if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) next.email = "That email does not look right.";
     return next;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) {
       setErrors(errs);
+      document.getElementById(`q-${Object.keys(errs)[0]}`)?.focus();
       return;
     }
     setSubmitting(true);
-    setTimeout(() => {
+    setSubmitError("");
+    const res = await submitLead(
+      "quote",
+      {
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        address: form.address,
+        service: serviceSlug,
+        service_name: estimate.name,
+        lot_size: form.sqft ? `${fmt(Number(form.sqft))} sq ft` : estimate.lotLabel,
+        frequency: estimate.frequency,
+        estimate: `$${estimate.perVisit}${estimate.unit ? ` ${estimate.unit}` : ""}`,
+        first_visit: `$${estimate.discountedFirst} (${estimate.firstPct}% off)`,
+        intro_rate_locked: introLocked ? "yes" : "no",
+        promo,
+        message: form.message,
+      },
+      trap
+    );
+    if (res.ok) {
+      router.push("/quote/thank-you");
+    } else {
       setSubmitting(false);
-      setModalOpen(true);
-    }, 900);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-    setForm(EMPTY_FORM);
-    setErrors({});
-    setIntroLocked(false);
+      setSubmitError(res.error);
+    }
   };
 
   const tier = tierIndex(form.lotSize);
+  const field = (key: string) => ({
+    "aria-invalid": !!errors[key] || undefined,
+    "aria-describedby": errors[key] ? `q-${key}-error` : undefined,
+  });
+  const errorText = (key: string) =>
+    errors[key] ? (
+      <p id={`q-${key}-error`} className="text-sm text-destructive">
+        {errors[key]}
+      </p>
+    ) : null;
 
   return (
-    <>
-      <AnimatePresence>
-        {modalOpen && (
-          <ThankYouModal
-            open={modalOpen}
-            name={form.name}
-            estimate={estimate}
-            introLocked={introLocked}
-            onClose={handleClose}
-          />
+    <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr] lg:gap-8">
+      <form onSubmit={handleSubmit} noValidate data-no-leaves className="relative rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-9">
+        {!compact && (
+          <div className="flex items-start gap-4">
+            <Icon3D name="memo" size={52} />
+            <div>
+              <h2 className="font-display text-2xl font-semibold">Tell us about your lawn</h2>
+              <p className="mt-1 text-[15px] leading-relaxed text-muted-foreground">Your price updates as you go.</p>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
 
-      <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr] lg:gap-8">
-        <form
-          onSubmit={handleSubmit}
-          className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm"
-        >
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
-            Instant estimate
-          </p>
-          <h3 className="mt-2 text-2xl font-bold tracking-tight">
-            Get your estimate
-          </h3>
-          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Tell us about your property. Your estimated price updates as you go.
-          </p>
+        {/* Honeypot: hidden from people, irresistible to bots. */}
+        <div aria-hidden className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+          <label>
+            Company website
+            <input tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+          </label>
+        </div>
 
-          <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="q-name">Full name</Label>
-                <Input
-                  id="q-name"
-                  ref={nameRef}
-                  placeholder="Jordan Smith"
-                  value={form.name}
-                  onChange={(e) => update("name", e.target.value)}
-                  aria-invalid={!!errors.name}
-                />
-                {errors.name && (
-                  <p className="text-sm text-destructive">{errors.name}</p>
-                )}
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="q-phone">Phone</Label>
-                <Input
-                  id="q-phone"
-                  type="tel"
-                  placeholder="(763) 555-0123"
-                  value={form.phone}
-                  onChange={(e) => update("phone", e.target.value)}
-                  aria-invalid={!!errors.phone}
-                />
-                {errors.phone && (
-                  <p className="text-sm text-destructive">{errors.phone}</p>
-                )}
-              </div>
+        <div className={compact ? "space-y-5" : "mt-7 space-y-5"}>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="q-name">Full name</Label>
+              <Input id="q-name" ref={nameRef} autoComplete="name" placeholder="Jordan Smith" value={form.name} onChange={(e) => update("name", e.target.value)} {...field("name")} />
+              {errorText("name")}
             </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="q-email">
-                  Email{" "}
-                  <span className="text-muted-foreground font-normal">(optional)</span>
-                </Label>
-                <Input
-                  id="q-email"
-                  type="email"
-                  placeholder="you@email.com"
-                  value={form.email}
-                  onChange={(e) => update("email", e.target.value)}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="q-address">Service address</Label>
-                <Input
-                  id="q-address"
-                  placeholder="123 Maple St, Maple Grove"
-                  value={form.address}
-                  onChange={(e) => update("address", e.target.value)}
-                  aria-invalid={!!errors.address}
-                />
-                {errors.address && (
-                  <p className="text-sm text-destructive">{errors.address}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="q-service" id="q-service-label">Service</Label>
-                <Select
-                  value={form.service}
-                  onValueChange={(v) => update("service", v)}
-                >
-                  <SelectTrigger id="q-service" aria-labelledby="q-service-label" className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(SERVICES).map(([key, s]) => (
-                      <SelectItem key={key} value={key}>
-                        {s.label} · from ${s.base}
-                        {s.unit}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="q-frequency" id="q-frequency-label">Frequency</Label>
-                <Select
-                  value={form.frequency}
-                  onValueChange={(v) => update("frequency", v)}
-                >
-                  <SelectTrigger id="q-frequency" aria-labelledby="q-frequency-label" className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(FREQUENCIES).map(([key, f]) => (
-                      <SelectItem key={key} value={key}>
-                        {f.label}
-                        {f.discount > 0
-                          ? ` · ${Math.round(f.discount * 100)}% off`
-                          : ""}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Lot size slider */}
-            <div className="rounded-xl border border-border bg-background/60 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <Label htmlFor="q-lot-size" className="flex items-center gap-1.5">
-                  <Ruler className="h-3.5 w-3.5 text-primary" />
-                  Lot size
-                </Label>
-                <p className="text-sm tabular-nums text-muted-foreground">
-                  <span className="font-semibold text-foreground">
-                    {estimate.lotLabel}
-                  </span>
-                  {" · "}about {fmt(estimate.lotSqft)} sq ft
-                </p>
-              </div>
-
-              <Slider
-                id="q-lot-size"
-                aria-label="Lot size"
-                aria-valuetext={`${estimate.lotLabel}, about ${fmt(estimate.lotSqft)} square feet`}
-                className="mt-4"
-                min={0}
-                max={LOT_TIERS.length - 1}
-                step={1}
-                value={[tier]}
-                onValueChange={([v]) => setTier(v)}
-              />
-              <div className="mt-2 flex justify-between text-xs">
-                {LOT_TIERS.map((t, i) => (
-                  <button
-                    key={t.key}
-                    type="button"
-                    tabIndex={-1}
-                    onClick={() => setTier(i)}
-                    className={
-                      i === tier
-                        ? "font-semibold text-primary"
-                        : "text-muted-foreground hover:text-foreground"
-                    }
-                  >
-                    {t.tick}
-                    {i === LOT_TIERS.length - 1 ? " acre" : ""}
-                  </button>
-                ))}
-              </div>
-
-              <div className="mt-3 flex items-center gap-3">
-                <span className="whitespace-nowrap text-xs text-muted-foreground">
-                  Or enter square feet
-                </span>
-                <div className="relative w-36">
-                  <Input
-                    id="q-sqft"
-                    aria-label="Lot size in square feet"
-                    inputMode="numeric"
-                    placeholder={fmt(estimate.lotSqft)}
-                    value={form.sqft ? fmt(Number(form.sqft)) : ""}
-                    onChange={(e) => setSqft(e.target.value)}
-                    className="h-9 pr-11 text-sm tabular-nums"
-                  />
-                  <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
-                    sq ft
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="q-msg">Notes (optional)</Label>
-              <Textarea
-                id="q-msg"
-                rows={3}
-                placeholder="Gate codes, problem weeds, pets, best time to call."
-                value={form.message}
-                onChange={(e) => update("message", e.target.value)}
-                className="resize-none"
-              />
+            <div className="space-y-2">
+              <Label htmlFor="q-phone">Phone</Label>
+              <Input id="q-phone" type="tel" autoComplete="tel" placeholder="(763) 555-0123" value={form.phone} onChange={(e) => update("phone", e.target.value)} {...field("phone")} />
+              {errorText("phone")}
             </div>
           </div>
 
-          <Button
-            type="submit"
-            size="lg"
-            disabled={submitting}
-            className="mt-6 w-full rounded-full"
-          >
-            {submitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Preparing your estimate
-              </>
-            ) : (
-              "See my estimate"
-            )}
-          </Button>
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-sm text-muted-foreground">
-            <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-            We call once, within one business day. No spam, no obligation.
-          </p>
-        </form>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="q-email">
+                Email <span className="font-normal text-muted-foreground">(optional)</span>
+              </Label>
+              <Input id="q-email" type="email" autoComplete="email" placeholder="you@email.com" value={form.email} onChange={(e) => update("email", e.target.value)} {...field("email")} />
+              {errorText("email")}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="q-address">Service address</Label>
+              <Input id="q-address" autoComplete="street-address" placeholder={`123 Maple St, ${site.address.city}`} value={form.address} onChange={(e) => update("address", e.target.value)} {...field("address")} />
+              {errorText("address")}
+            </div>
+          </div>
 
-        {/* Price panel: stretches to the form's height via the grid's default
-            align-items: stretch, with the footer pinned by mt-auto. */}
-        <div className="flex flex-col">
-          <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-foreground p-6 text-background shadow-sm sm:p-8">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/25 blur-3xl"
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label id="q-service-label">Service</Label>
+              <Select value={serviceSlug} onValueChange={(v) => update("service", v)}>
+                <SelectTrigger aria-labelledby="q-service-label" className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {services.map((s) => (
+                    <SelectItem key={s.slug} value={s.slug}>
+                      <Icon3D name={s.icon} size={18} />
+                      {s.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label id="q-frequency-label">How often</Label>
+              <Select value={form.frequency} onValueChange={(v) => update("frequency", v)}>
+                <SelectTrigger aria-labelledby="q-frequency-label" className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(FREQUENCIES).map(([key, f]) => (
+                    <SelectItem key={key} value={key}>
+                      {f.label}
+                      {f.discount > 0 ? ` · save ${Math.round(f.discount * 100)}%` : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-sage-50/70 p-5">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+              <Label htmlFor="q-lot-size" className="flex items-center gap-2">
+                <Icon3D name="ruler" size={22} />
+                Lot size
+              </Label>
+              <p className="text-sm tabular-nums text-muted-foreground">
+                <span className="font-semibold text-foreground">{estimate.lotLabel}</span>
+                <span className="nowrap">, about {fmt(estimate.lotSqft)} sq ft</span>
+              </p>
+            </div>
+            <Slider
+              id="q-lot-size"
+              aria-label="Lot size"
+              aria-valuetext={`${estimate.lotLabel}, about ${fmt(estimate.lotSqft)} square feet`}
+              className="mt-5"
+              min={0}
+              max={LOT_TIERS.length - 1}
+              step={1}
+              value={[tier]}
+              onValueChange={([v]) => setTier(v)}
             />
-
-            <div className="relative flex items-center justify-between gap-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-background/60">
-                Your estimated price
-              </p>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-background/15 bg-background/10 px-2.5 py-1 text-xs font-medium text-background/85">
-                <Calendar className="h-3 w-3" />
-                {estimate.frequency}
-              </span>
-            </div>
-
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={`${estimate.perVisit}-${estimate.total}`}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18 }}
-                className="relative mt-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-2"
-              >
-                <div>
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-5xl font-bold tracking-tight tabular-nums">
-                      ${estimate.perVisit}
-                    </span>
-                    <span className="text-sm text-background/70">
-                      {estimate.unit}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-sm text-background/70">
-                    {estimate.serviceShort.charAt(0).toUpperCase() +
-                      estimate.serviceShort.slice(1)}
-                  </p>
-                </div>
-                {!estimate.isOneTime && (
-                  <div className="text-right">
-                    <p className="text-2xl font-semibold tracking-tight tabular-nums">
-                      ~${fmt(estimate.total)}
-                    </p>
-                    <p className="text-xs text-background/60">
-                      {estimate.suffix.trim()}
-                    </p>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-
-            <dl className="relative mt-6 space-y-2.5 border-t border-background/10 pt-5 text-sm">
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-background/60">Lot size</dt>
-                <dd className="text-right font-medium tabular-nums">
-                  {estimate.lotLabel}
-                  <span className="text-background/55">
-                    , about {fmt(estimate.lotSqft)} sq ft
-                  </span>
-                </dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-background/60">Frequency discount</dt>
-                <dd className="font-medium tabular-nums">
-                  {estimate.discountPct > 0
-                    ? `${estimate.discountPct}% off`
-                    : "None"}
-                </dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-background/60">First visit</dt>
-                <dd className="font-semibold tabular-nums text-success">
-                  ${estimate.discountedFirst}
-                  {estimate.unit}
-                  <span className="font-medium">
-                    {" "}
-                    ({FIRST_VISIT_DISCOUNT_PCT}% off)
-                  </span>
-                </dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-background/60">On-site confirmation</dt>
-                <dd className="font-medium">Included</dd>
-              </div>
-            </dl>
-
-            <div className="relative mt-5">
-              {introLocked ? (
-                <div
-                  role="status"
-                  className="flex items-center justify-center gap-2 rounded-full border border-success/40 bg-success/10 px-4 py-2.5 text-sm font-semibold text-success"
-                >
-                  <Check className="h-4 w-4" strokeWidth={2.5} />
-                  Intro rate locked. Finish the form to claim it.
-                </div>
-              ) : (
-                <Button
+            <div className="mt-2.5 flex justify-between text-xs">
+              {LOT_TIERS.map((t, i) => (
+                <button
+                  key={t.key}
                   type="button"
-                  size="lg"
-                  onClick={lockIntroRate}
-                  className="w-full rounded-full bg-background text-foreground hover:bg-background/90"
+                  tabIndex={-1}
+                  onClick={() => setTier(i)}
+                  className={i === tier ? "font-semibold text-primary" : "text-muted-foreground transition-colors hover:text-foreground"}
                 >
-                  <Lock className="mr-2 h-4 w-4" />
-                  Lock in ${estimate.discountedFirst} first visit
-                </Button>
-              )}
-            </div>
-
-            <ul className="relative mt-5 space-y-1.5 border-t border-background/10 pt-5 text-sm">
-              {[
-                "Free, no-obligation estimate",
-                "Same crew, same day each week",
-                "Licensed and insured in Minnesota",
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-2.5">
-                  <Check className="h-4 w-4 shrink-0 text-success" strokeWidth={2.5} />
-                  <span className="text-background/90">{item}</span>
-                </li>
+                  {t.tick}
+                  {i === LOT_TIERS.length - 1 ? " acre" : ""}
+                </button>
               ))}
-            </ul>
-
-            <div className="relative mt-auto border-t border-background/10 pt-4">
-              <p className="text-sm leading-relaxed text-background/55">
-                This is a typical price for your area. We confirm the exact
-                number on site.
-              </p>
-              <div className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-background/8 px-4 py-3 text-sm">
-                <span className="text-background/70">Prefer to talk?</span>
-                <a
-                  href="tel:+17635550142"
-                  className="flex items-center gap-1.5 font-semibold text-background hover:underline"
-                >
-                  <Phone className="h-4 w-4" />
-                  {PHONE}
-                </a>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Label htmlFor="q-sqft" className="text-xs font-normal text-muted-foreground">
+                Or enter square feet
+              </Label>
+              <div className="relative w-36">
+                <Input
+                  id="q-sqft"
+                  inputMode="numeric"
+                  placeholder={fmt(estimate.lotSqft)}
+                  value={form.sqft ? fmt(Number(form.sqft)) : ""}
+                  onChange={(e) => setSqft(e.target.value)}
+                  className="h-10 pr-12 text-sm tabular-nums"
+                />
+                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">sq ft</span>
               </div>
+            </div>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-[1fr_12rem]">
+            <div className="space-y-2">
+              <Label htmlFor="q-message">
+                Notes <span className="font-normal text-muted-foreground">(optional)</span>
+              </Label>
+              <Textarea id="q-message" rows={3} placeholder="Gate codes, pets, problem weeds, best time to call." value={form.message} onChange={(e) => update("message", e.target.value)} className="resize-none" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="q-promo">
+                Promo code <span className="font-normal text-muted-foreground">(optional)</span>
+              </Label>
+              <Input id="q-promo" autoComplete="off" placeholder="STRIPES10" value={promo} onChange={(e) => setForm((f) => ({ ...f, promo: e.target.value.toUpperCase() }))} className="uppercase tracking-wider" />
+              {promo && (
+                <p className={promoValid ? "text-sm font-medium text-primary" : "text-sm text-muted-foreground"}>
+                  {promoValid ? `Applied: extra ${site.offers.gamePromo.pct}% off your first visit.` : "We will check this code when we call."}
+                </p>
+              )}
             </div>
           </div>
         </div>
+
+        <Button type="submit" variant="cta" size="lg" disabled={submitting} className="mt-7 w-full">
+          {submitting ? (
+            <>
+              <span className="leaf-spinner" aria-hidden />
+              Sending your request
+            </>
+          ) : (
+            <span className="arrow-link">Send my free quote request</span>
+          )}
+        </Button>
+        {submitError && (
+          <p role="alert" className="mt-3 text-center text-sm text-destructive">
+            {submitError} You can also call <a className="font-semibold underline" href={phoneHref}>{site.phone.display}</a>.
+          </p>
+        )}
+        <p className="mt-4 flex items-center justify-center gap-2 text-center text-sm text-muted-foreground">
+          <Icon3D name="lock" size={18} />
+          We call once, within one business day. No spam, no obligation.
+        </p>
+      </form>
+
+      {/* Live estimate panel */}
+      <div className="flex flex-col">
+        <div className="grain on-dark relative flex h-full flex-col overflow-hidden rounded-3xl bg-ink p-6 text-ink-foreground shadow-lift sm:p-9">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cream/60">Your estimated price</p>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-cream/15 px-3 py-1 text-xs font-medium text-cream/85">
+              {estimate.frequency}
+            </span>
+          </div>
+
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={`${estimate.perVisit}-${estimate.total}-${estimate.name}`}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: DURATION.micro, ease: EASE_SOFT }}
+              className="mt-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-2"
+            >
+              <div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="font-display text-6xl font-semibold tabular-nums">${estimate.perVisit}</span>
+                  <span className="text-sm text-cream/70 nowrap">{estimate.unit || "flat"}</span>
+                </div>
+                <p className="mt-1 text-sm text-cream/70">{estimate.name}</p>
+              </div>
+              {!estimate.isOneTime && (
+                <div className="text-right">
+                  <p className="text-2xl font-semibold tabular-nums">~${fmt(estimate.total)}</p>
+                  <p className="text-xs text-cream/60">per month</p>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+
+          <dl className="mt-7 space-y-3 border-t border-cream/10 pt-6 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-cream/60">Lot size</dt>
+              <dd className="text-right font-medium tabular-nums">{estimate.lotLabel}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-cream/60">Frequency savings</dt>
+              <dd className="font-medium tabular-nums">{estimate.discountPct > 0 ? `${estimate.discountPct}% off` : "None"}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-cream/60">First visit</dt>
+              <dd className="text-right font-semibold tabular-nums text-moss-300">
+                ${estimate.discountedFirst} <span className="font-medium">({estimate.firstPct}% off)</span>
+              </dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-cream/60">On-site confirmation</dt>
+              <dd className="font-medium">Included</dd>
+            </div>
+          </dl>
+
+          <div className="mt-6">
+            {introLocked ? (
+              <div role="status" className="flex items-center justify-center gap-2 rounded-full border border-moss-300/40 bg-moss-300/10 px-4 py-3 text-sm font-semibold text-moss-300">
+                <Icon3D name="sparkles" size={20} />
+                Intro rate locked. Finish the form to claim it.
+              </div>
+            ) : (
+              <Button
+                type="button"
+                size="lg"
+                variant="cta"
+                className="w-full"
+                onClick={() => {
+                  setIntroLocked(true);
+                  track("intro_rate_locked");
+                  nameRef.current?.focus();
+                }}
+              >
+                <Icon3D name="lock" size={20} />
+                Lock in ${estimate.discountedFirst} first visit
+              </Button>
+            )}
+          </div>
+
+          <ul className="mt-6 space-y-3 border-t border-cream/10 pt-6 text-sm">
+            {[
+              { icon: "handshake" as const, text: "Free, no-obligation estimate" },
+              { icon: "calendar" as const, text: "Same crew, same day each week" },
+              { icon: "shield" as const, text: "Licensed and insured in Minnesota" },
+            ].map((item) => (
+              <li key={item.text} className="flex items-center gap-3">
+                <Icon3D name={item.icon} size={24} />
+                <span className="text-cream/90">{item.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-auto pt-6">
+            <p className="text-sm leading-relaxed text-cream/55">A typical price for your area. We confirm the exact number on site.</p>
+            <a href={phoneHref} className="group mt-4 flex items-center justify-between gap-3 rounded-2xl bg-cream/8 px-4 py-3.5 text-sm transition-colors hover:bg-cream/12">
+              <span className="text-cream/70">Prefer to talk?</span>
+              <span className="flex items-center gap-2 font-semibold text-cream nowrap">
+                <Icon3D name="phone" size={20} float />
+                {site.phone.display}
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

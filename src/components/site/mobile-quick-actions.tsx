@@ -1,45 +1,36 @@
 "use client";
 
-import { Phone, MessageCircle, CalendarCheck } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Icon3D } from "@/components/site/icon-3d";
+import { phoneHref, smsHref } from "@/config/site";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
-const PHONE_HREF = "tel:+17635550142";
-const SMS_HREF = "sms:+17635550142";
-
-const actions = [
-  { label: "Call", href: PHONE_HREF, icon: Phone },
-  { label: "Text", href: SMS_HREF, icon: MessageCircle },
-  { label: "Quote", href: "#quote", icon: CalendarCheck, primary: true },
-] as const;
-
+// Sticky call / text / quote bar on phones, where those three actions are
+// what almost every visitor wants.
 export function MobileQuickActions() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/quote")) return null;
+
+  const item = "group flex flex-1 flex-col items-center justify-center gap-1 py-2 text-[11px] font-semibold transition-colors";
   return (
     <nav
       aria-label="Quick actions"
-      className={cn(
-        "fixed inset-x-0 bottom-0 z-40 flex items-stretch border-t border-border/80",
-        "bg-background/95 backdrop-blur-lg shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.25)]",
-        "pb-[env(safe-area-inset-bottom)] lg:hidden"
-      )}
+      className="fixed inset-x-0 bottom-0 z-40 flex items-stretch border-t border-border/80 bg-cream/95 pb-[env(safe-area-inset-bottom)] shadow-top backdrop-blur-lg lg:hidden"
     >
-      {actions.map(({ label, href, icon: Icon, ...rest }) => (
-        <a
-          key={label}
-          href={href}
-          {...("external" in rest && rest.external
-            ? { target: "_blank", rel: "noopener noreferrer" }
-            : {})}
-          className={cn(
-            "flex flex-1 flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-semibold transition-colors",
-            "primary" in rest && rest.primary
-              ? "bg-primary text-primary-foreground"
-              : "text-foreground/80 active:bg-accent"
-          )}
-        >
-          <Icon className="h-5 w-5" />
-          {label}
-        </a>
-      ))}
+      <a href={phoneHref} onClick={() => track("call_click", { location: "quick_bar" })} className={cn(item, "text-foreground/80 active:bg-sage-100")}>
+        <Icon3D name="phone" size={24} float />
+        Call
+      </a>
+      <a href={smsHref} onClick={() => track("sms_click", { location: "quick_bar" })} className={cn(item, "text-foreground/80 active:bg-sage-100")}>
+        <Icon3D name="chat" size={24} float />
+        Text
+      </a>
+      <Link href="/quote" className={cn(item, "bg-cta text-cta-foreground active:bg-cta-hover")}>
+        <Icon3D name="memo" size={24} float />
+        Free quote
+      </Link>
     </nav>
   );
 }
