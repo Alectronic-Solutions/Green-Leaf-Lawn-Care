@@ -42,7 +42,10 @@ export default function Home() {
             sizes="100vw"
             className="object-cover"
           />
-          <HeroVideo src={assetPath("/videos/hero-mowing.mp4")} />
+          <HeroVideo
+            src={assetPath("/videos/hero-mowing.mp4")}
+            mobileSrc={assetPath("/videos/hero-mowing-mobile.mp4")}
+          />
           <div className="absolute inset-0 bg-linear-to-r from-forest-950/85 via-forest-950/55 to-forest-950/10" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-forest-950/70 to-transparent" />
         </div>
