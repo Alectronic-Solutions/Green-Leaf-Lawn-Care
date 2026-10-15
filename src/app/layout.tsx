@@ -3,8 +3,7 @@ import Script from "next/script";
 import { Geist, Fraunces } from "next/font/google";
 import "./globals.css";
 import { site } from "@/config/site";
-import { JsonLd } from "@/components/site/json-ld";
-import { localBusinessLd } from "@/lib/seo";
+import DemoNotice from "./DemoNotice";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +31,8 @@ export const metadata: Metadata = {
   category: "Lawn Care Services",
   manifest: `${site.basePath}/site.webmanifest`,
   formatDetection: { telephone: false },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
-  },
+  // Fictional business: keep it out of search (see DemoNotice).
+  robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
@@ -50,8 +46,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${fraunces.variable} font-sans antialiased`}>
-        <JsonLd data={localBusinessLd()} />
         {children}
+        <DemoNotice />
         {ga4Id && (
           <>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="afterInteractive" />
